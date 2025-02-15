@@ -1,4 +1,4 @@
-# AWS SPC Examples - Security
+# AWS SPC Examples
 
 ## Protect security services
 
@@ -242,6 +242,39 @@ The following example SCP prevents users from creating resource shares that allo
       "Condition": {
         "StringNotEquals": {
           "aws:PrincipalOrgID": "o-1234567890"
+        }
+      }
+    }
+  ]
+}
+```
+
+
+## Prevent IAM credencials lake
+
+API keys of AWS IAM users are often used when on-prem systems need to connect to your AWS environment. They are difficult to replace (you need some form of secret on the client side, also if you use IAM Roles Anywhere). Yet, leaked API keys are a frequent cause of compromised AWS accounts. To reduce the usefulness of API keys to unauthorized parties, consider restricting their validity to known IP ranges. You can also put this restriction into SCPs. If you only ever expect your on-prem networks to use IAM user access keys
+
+This is an underrated strategy. IP whitelisting reduces the probability of getting breaches, despite credential leak. 
+
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "DenyChangingContactInfo",
+      "Effect": "Deny",
+      "Action": "*",
+      "Resource": "*",
+      "Condition": {
+        "StringNotEquals": {
+          "aws:PrincipalType": "User"
+        },
+        "NotIpAddress": {
+          "aws:SourceIp": [
+            "210.0.112.0/24",
+            "208.0.120.0/24"
+          ]
         }
       }
     }

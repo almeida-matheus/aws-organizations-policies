@@ -1,4 +1,4 @@
-<h1 align="center">aws-scp-examples</h1>
+<h1 align="center">aws-organizations-policies</h1>
 
 <p align="center">
     <a href="#about">About</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -22,7 +22,7 @@ sudo apt install python3 && python3-pip
 
 #### 2. Clone git repository
 ```
-git clone git@github.com:almeida-matheus/aws-scp-examples.git
+git clone git@github.com:almeida-matheus/aws-organizations-policies.git
 ```
 
 #### 3. Install python dependencies
@@ -33,7 +33,7 @@ python3 -m mkdocs serve
 
 #### 3. Run local server
 ```
-cd aws-scp-examples/
+cd aws-organizations-policies/
 python3 -m mkdocs serve
 ```
 

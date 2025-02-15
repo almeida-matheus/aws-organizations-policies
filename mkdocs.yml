@@ -1,8 +1,8 @@
-site_name: AWS SCP Examples
+site_name: AWS Organizations Policies
 nav:
   - About: index.md
-  - SCP Security Examples: security.md
-theme: 
+  - SCP Examples: aws-scp-examples.md
+theme:
   name: material
   palette:
     scheme: default
@@ -17,8 +17,8 @@ theme:
     - content.action.edit
   icon:
     logo: material/cloud
-    repo: fontawesome/brands/github 
-    edit: material/pencil 
+    repo: fontawesome/brands/github
+    edit: material/pencil
     view: material/eye
 markdown_extensions:
   - def_list
@@ -34,6 +34,6 @@ markdown_extensions:
 plugins:
   - search
   - offline
-repo_url: https://github.com/almeida-matheus/aws-scp-examples
-repo_name: aws-scp-examples
+repo_url: https://github.com/almeida-matheus/aws-organizations-policies
+repo_name: aws-organizations-policies
 edit_uri: edit/main/docs/
