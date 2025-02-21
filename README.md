@@ -10,9 +10,15 @@
 <br>
 
 ## About
-AWS SCP (Service Control Policies) for AWS Organizations service.
-Centrally manage permissions across AWS accounts, enforcing security, compliance, and governance at an organizational level. 
-Simplifies access control and reduces risk of misconfigurations.
+
+AWS Organizations allows you to manage multiple AWS accounts in a centralized way. 
+
+AWS Organizations Policies are a set of rules that help you manage your organizations accounts and control access.
+
+The purpose of this project is to centrally provide examples of policies that can help increase the security level of your organizations accounts.
+
+Feel free to contibute :)
+
 
 ## Installation
 #### 1. Install python and pip
@@ -28,7 +34,6 @@ git clone git@github.com:almeida-matheus/aws-organizations-policies.git
 #### 3. Install python dependencies
 ```
 pip3 install mkdocs mkdocs-material
-python3 -m mkdocs serve
 ```
 
 #### 3. Run local server
