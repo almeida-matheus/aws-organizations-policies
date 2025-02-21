@@ -1,23 +1,23 @@
 # AWS SPC Examples
 
-## Protect security services
+## Prevent disabling of security services
 
-Once you have configured an AWS account to meet a security baseline, you will want to ensure your configuration cannot be modified by anyone.
+Once you have established a security baseline for your AWS account, it is crucial to ensure that the configuration remains secure and cannot be altered by unauthorized users.
 
-- Deny any actions that could deletes of CloudTrail logs to ensure audit trails are preserved.
-- Deny any actions that could disrupt AWS Config to maintain consistent settings.
-- Deny any actions that could disrupt GuardDuty.
-- Deny any actions that could disrupt Security Hub.
-- Deny any actions that could disrupt Access Analyzer.
-- Deny any actions that could disrupt Macie.
-- Deny any actions that could disrupt EventBridge rules that generate important alerts.
+- Statement `DenyCloudtrail`: Deny any actions that could disrupt CloudTrail logs to ensure audit trails are preserved.
+- Statement `DenyConfig`: Deny any actions that could disrupt AWS Config.
+- Statement `DenyGuardDutyDeny`: any actions that could disrupt GuardDuty.
+- Statement `DenySecurityHub`: Deny any actions that could disrupt Security Hub.
+- Statement `DenyAccessAnalyzer`: Deny any actions that could disrupt Access Analyzer.
+- Statement `DenyMacie`: Deny any actions that could disrupt Macie.
+- Statement `DenyEventBridge`: Deny any actions that could disrupt EventBridge rules that generate important alerts.
 
 ```json
 {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "PreventCloudTrailModification",
+      "Sid": "DenyCloudtrail",
       "Effect": "Deny",
       "Action": [
         "cloudtrail:DeleteTrail",
@@ -29,7 +29,7 @@ Once you have configured an AWS account to meet a security baseline, you will wa
       "Resource": "*"
     },
     {
-      "Sid": "PreventConfigModification",
+      "Sid": "DenyConfig",
       "Effect": "Deny",
       "Action": [
         "config:DeleteAggregationAuthorization",
@@ -49,7 +49,7 @@ Once you have configured an AWS account to meet a security baseline, you will wa
       "Resource": "*"
     },
     {
-      "Sid": "PreventGuardDutyModification",
+      "Sid": "DenyGuardDuty",
       "Effect": "Deny",
       "Action": [
         "guardduty:AcceptInvitation",
@@ -87,7 +87,7 @@ Once you have configured an AWS account to meet a security baseline, you will wa
       "Resource": "*"
     },
     {
-      "Sid": "PreventSecurityHubModification",
+      "Sid": "DenySecurityHub",
       "Effect": "Deny",
       "Action": [
         "securityhub:DeleteInvitations",
@@ -99,7 +99,7 @@ Once you have configured an AWS account to meet a security baseline, you will wa
       "Resource": "*"
     },
     {
-      "Sid": "PreventAccessAnalyzerModification",
+      "Sid": "DenyAccessAnalyzer",
       "Effect": "Deny",
       "Action": [
         "access-analyzer:DeleteAnalyzer"
@@ -107,7 +107,7 @@ Once you have configured an AWS account to meet a security baseline, you will wa
       "Resource": "*"
     },
     {
-      "Sid": "PreventMacieModification",
+      "Sid": "DenyMacie",
       "Effect": "Deny",
       "Action": [
         "macie2:DisassociateFromMasterAccount",
@@ -118,7 +118,7 @@ Once you have configured an AWS account to meet a security baseline, you will wa
       "Resource": "*"
     },
     {
-      "Sid": "PreventEventBridgeModification",
+      "Sid": "DenyEventBridge",
       "Effect": "Deny",
       "Action": [
         "events:DeleteRule",
@@ -131,7 +131,72 @@ Once you have configured an AWS account to meet a security baseline, you will wa
 }
 ```
 
-## Require EC2 IMDSv2
+## Prevent member accounts from leaving the organizations
+
+The following policy blocks member accounts leave your organization where they would no longer be restricted by your SCP.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyLeaveOrganization",
+      "Effect": "Deny",
+      "Action": "organizations:LeaveOrganization",
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+## Deny sharing of resources outside the organization
+
+The following example SCP prevents users from sharing resources that are not part of the organization with AWS Resource Access Manager (RAM).
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Deny",
+      "Action": [
+        "ram:CreateResourceShare",
+        "ram:UpdateResourceShare"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "Bool": {
+          "ram:RequestedAllowsExternalPrincipals": "true"
+        }
+      }
+    },
+    {
+      "Effect": "Deny",
+      "Action": [
+        "ram:AcceptResourceShareInvitation",
+        "ram:AssociateResourceShare",
+        "ram:CreateResourceShare",
+        "ram:DeleteResourceShare",
+        "ram:DisassociateResourceShare",
+        "ram:RejectResourceShareInvitation",
+        "ram:TagResource",
+        "ram:UntagResource",
+        "ram:UpdateResourceShare",
+        "ram:EnableSharingWithAwsOrganization"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringNotEquals": {
+          "aws:PrincipalOrgID": "o-1234567890"
+        }
+      }
+    }
+  ]
+}
+```
+
+
+## Require IMDSv2 enabled to launch EC2 instances
 
 The following policy restricts all users from launching EC2 instances without IMDSv2 but allows specific IAM identities to modify instance metadata options.
 
@@ -185,108 +250,38 @@ The following policy restricts all users from launching EC2 instances without IM
 }
 ```
 
-## Deny ability to leave Organization
+## Block root user access
 
-The following policy avoid having the accounts simply leave your organization where they would no longer be restricted by your SCP.
+The root user has privileged access by default, this policy blocks access for this user in the AWS account.
 
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Deny",
-      "Action": "organizations:LeaveOrganization",
-      "Resource": "*"
-    }
-  ]
-}
-```
+Benefits:
 
-## Deny sharing of resources outside of the organization using AWS RAM
-
-The following policy avoid having the accounts simply leave your organization where they would no longer be restricted by your SCP.
-The following example SCP prevents users from creating resource shares that allow sharing with IAM users and roles that aren't part of the organization.
+- The difficulty of understanding what person was involved in an action if they authenticate with the root user.
+- It mitigates the concerns on AWS around password recovery such account take-over risk that can happen with Root users.
+- There isn’t a need to set up a multi-factor device for the user.
 
 ```json
 {
   "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Deny",
-      "Action": [
-        "ram:CreateResourceShare",
-        "ram:UpdateResourceShare"
-      ],
-      "Resource": "*",
-      "Condition": {
-        "Bool": {
-          "ram:RequestedAllowsExternalPrincipals": "true"
-        }
-      }
-    },
-    {
-      "Effect": "Deny",
-      "Action": [
-        "ram:AcceptResourceShareInvitation",
-        "ram:AssociateResourceShare",
-        "ram:CreateResourceShare",
-        "ram:DeleteResourceShare",
-        "ram:DisassociateResourceShare",
-        "ram:RejectResourceShareInvitation",
-        "ram:TagResource",
-        "ram:UntagResource",
-        "ram:UpdateResourceShare",
-        "ram:EnableSharingWithAwsOrganization"
-      ],
-      "Resource": "*",
-      "Condition": {
-        "StringNotEquals": {
-          "aws:PrincipalOrgID": "o-1234567890"
-        }
+  "Statement": {
+    "Sid": "DenyRootUser",
+    "Effect": "Deny",
+    "Action": "*",
+    "Resource": "*",
+    "Condition": {
+      "StringLike": {
+        "aws:PrincipalArn": "arn:aws:iam::*:root"
       }
     }
-  ]
+  }
 }
 ```
 
+## Deny contact information changes
 
-## Prevent IAM credencials lake
+The following policy prevents the risk of account takeover by preventing contact information from being changed by any user.
 
-API keys of AWS IAM users are often used when on-prem systems need to connect to your AWS environment. They are difficult to replace (you need some form of secret on the client side, also if you use IAM Roles Anywhere). Yet, leaked API keys are a frequent cause of compromised AWS accounts. To reduce the usefulness of API keys to unauthorized parties, consider restricting their validity to known IP ranges. You can also put this restriction into SCPs. If you only ever expect your on-prem networks to use IAM user access keys
-
-This is an underrated strategy. IP whitelisting reduces the probability of getting breaches, despite credential leak. 
-
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "DenyChangingContactInfo",
-      "Effect": "Deny",
-      "Action": "*",
-      "Resource": "*",
-      "Condition": {
-        "StringNotEquals": {
-          "aws:PrincipalType": "User"
-        },
-        "NotIpAddress": {
-          "aws:SourceIp": [
-            "210.0.112.0/24",
-            "208.0.120.0/24"
-          ]
-        }
-      }
-    }
-  ]
-}
-```
-
-## Prevent account takeover risk
-
-The following policy avoid account takeover.
-
-You should have the contact information for your accounts set to approved phone numbers and other values.
+One way to resolve access issues to your AWS account and receive critical security alerts is through contact information.
 
 ```json
 {
@@ -307,18 +302,20 @@ You should have the contact information for your accounts set to approved phone 
 }
 ```
 
-## Restrict AWS region access
+## Deny access to unused regions
 
-Deny access to AWS services in regions that are not approved for use.
+This policy denies access to any operations outside of the specified regions. This way you ensure that no resources will be provisioned in another region and you won't need to worry about applying security controls.
 
-[Oficial AWS example](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html#example-scp-deny-region).
+In this exemples lets supposed that my organizations have workloads only in the `us-west-1` and `sa-east-1` regions, so this policy uses the Deny effect to deny access to all requests for operations that don't target one of the two approved regions. 
+
+The `NotAction` element enables you to list services whose operations (or individual operations) are exempted from this restriction. Because global services have endpoints that are physically hosted by the `us-east-1` region , they must be exempted in this way. With an SCP structured this way, requests made to global services in the `us-east-1` region are allowed if the requested service is included in the `NotAction` element. Any other requests to services in the `us-east-1` region are denied by this example policy.
 
 ```json
 {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "DenyAllOutsideEU",
+      "Sid": "DenyAllUnapprovedRegions",
       "Effect": "Deny",
       "NotAction": [
         "a4b:*",
@@ -368,8 +365,8 @@ Deny access to AWS services in regions that are not approved for use.
       "Condition": {
         "StringNotEquals": {
           "aws:RequestedRegion": [
-            "eu-central-1",
-            "eu-west-1"
+            "us-west-1",
+            "sa-east-1"
           ]
         },
         "ArnNotLike": {
@@ -384,14 +381,18 @@ Deny access to AWS services in regions that are not approved for use.
 }
 ```
 
-## Deny account region modification
+Reference: [AWS Official Documentation](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html#example-scp-deny-region)
+
+## Prevent region enable and disable actions
+
+This policy prevents unauthorized or accidental changes to the region settings, which could impact the availability and configuration of services across the account. The policy ensures that only specific, highly privileged roles can enable or disable AWS regions.
 
 ```json
 {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "PreventAccountRegionChanges",
+      "Sid": "PreventAccountRegionUpdate",
       "Effect": "Deny",
       "Action": [
         "account:EnableRegion",
@@ -413,11 +414,13 @@ Deny access to AWS services in regions that are not approved for use.
 }
 ```
 
-## Prevent critical IAM actions
+## Deny critical IAM actions
 
-* Deny creation of access keys for the root user
-* Deny creation of any access keys except security team
-* Deny update IAM password policy except security team
+The following policy blocks access key creation for the root user and restricts access to other critical IAM actions.
+
+* Statement `DenyCreateRootUserAccessKey`: Deny creation of access keys for the root user.
+* Statement `DenyCreateAccessKey`: Deny creation of any access keys except security roles.
+* Statement `DenyPasswordPolicyUpdate`: Deny update IAM password policy except security roles.
 
 ```json
 {
@@ -437,6 +440,7 @@ Deny access to AWS services in regions that are not approved for use.
       }
     },
     {
+      "Sid": "DenyCreateAccessKey",
       "Effect": "Deny",
       "Action": [
         "iam:CreateUser",
@@ -454,6 +458,7 @@ Deny access to AWS services in regions that are not approved for use.
       }
     },
     {
+      "Sid": "DenyPasswordPolicyUpdate",
       "Effect": "Deny",
       "Action": [
         "iam:DeleteAccountPasswordPolicy",
@@ -474,8 +479,7 @@ Deny access to AWS services in regions that are not approved for use.
 }
 ```
 
-
-## Deny ability to modify an important IAM role
+## Restrict update of critical IAM roles
 
 This policy restricts IAM users and roles from making changes to the specified IAM role that can be used to deny modifications of an incident response or other security auditing role.
 
@@ -509,88 +513,32 @@ This policy restricts IAM users and roles from making changes to the specified I
 }
 ```
 
-## Deny root user access
+## Protect default security settings across services
 
-To disallowing account access with root user credentials due to the difficulty of understanding what person was involved in an action if they authenticate with the root users because it has privelege access by default.
+The following policy prevent some important security settings services from being disable. None of these features are enabled by default and should be enabled as part of your initial account baseline.
 
-- Advantages:
-    - It mitigates the concerns on AWS around password recovery such account take-over risk that can happen with Root users
-    - There isn’t a need to set up a multi-factor device for the user
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": {
-    "Sid": "DenyRootUser",
-    "Effect": "Deny",
-    "Action": "*",
-    "Resource": "*",
-    "Condition": {
-      "StringLike": {
-        "aws:PrincipalArn": "arn:aws:iam::*:root"
-      }
-    }
-  }
-}
-```
-
-## Protect default security settings
-
-The following policy restricts all users from disabling the default Amazon EBS Encryption.
-
-The following SCP protects some important security settings from being turned off. None of these features are enabled by default and should be enabled as part of your initial account baseline. These features are
-
-* Prevent disabling of default Amazon EBS encryption
-* Access Analyzer: A service for identifying when resources are made public or granted access to untrusted accounts.
-* Default EBS encryption: This encrypts the virtual hard-drives of your EC2s by default.
-* S3 Block Public Access: Denies S3 buckets from being made public.
+- Statement `ProtectS3PublicAccess`: Prevent disabling block of S3 buckets from being made public.
+- Statement `ProtectEBSEncryption`: Prevent disabling of default Amazon EBS encryption.
 
 ```json
 {
   "Version": "2012-10-17",
   "Statement": [
     {
+      "Sid": "ProtectS3PublicAccess",
       "Effect": "Deny",
       "Action": [
-        "ec2:DisableEbsEncryptionByDefault",
-        "access-analyzer:DeleteAnalyzer",
-        "ec2:DisableEbsEncryptionByDefault",
         "s3:PutAccountPublicAccessBlock"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-```
-
-## Prevent public resource via policy
-
-* Prevent changes to bucket logging for your Amazon S3 buckets.
-* Prevent changes to bucket policy for your Amazon S3 buckets
-* Prevent uploading unencrypted objects to S3 buckets.
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Deny",
-      "Action": [
-        "s3:PutBucketLogging",
-        "s3:PutBucketPolicy"
       ],
       "Resource": "*"
     },
     {
-      "Sid": "PreventUnencryptedObject",
+      "Sid": "ProtectEBSEncryption",
       "Effect": "Deny",
-      "Action": "s3:PutObject",
-      "Resource": "*",
-      "Condition": {
-        "Null": {
-          "s3:x-amz-server-side-encryption": "true"
-        }
-      }
+      "Action": [
+        "ec2:DisableEbsEncryptionByDefault"
+      ],
+      "Resource": "*"
     }
   ]
 }

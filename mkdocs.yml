@@ -2,6 +2,7 @@ site_name: AWS Organizations Policies
 nav:
   - About: index.md
   - SCP Examples: aws-scp-examples.md
+  - RCP Examples: aws-rcp-examples.md
 theme:
   name: material
   palette:
