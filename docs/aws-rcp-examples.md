@@ -4,13 +4,13 @@
 
 Some AWS services use their service principals to interact with resources in other AWS services. When an unintended actor tries to leverage an AWS service principal's trust to access resources they shouldn't, this is known as the cross-service [confused deputy problem](https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html).
 
-The following policy ensures that AWS service principals can only access your resources on behalf of requests originating from your organization. This policy applies the control only on requests that have `aws:SourceAccount` present so that service integrations that do not require the use of `aws:SourceAccount` aren't impacted. If the `aws:SourceAccount` is present in the request context, the `Null` condition will evaluate to `true`, causing the `aws:SourceOrgID` key to be enforced.
+The following policy ensures that AWS service principals can only access your resources on behalf of requests originating from your organization (`o-1234567890`) and a trusted third party account (`333333333333`). This policy applies the control only on requests that have `aws:SourceAccount` present so that service integrations that do not require the use of `aws:SourceAccount` aren't impacted. If the `aws:SourceAccount` is present in the request context, the `Null` condition will evaluate to `true`, causing the `aws:SourceOrgID` key to be enforced.
 
 ```json
 {
     "Version": "2012-10-17",
     "Statement": [
-        {            
+        {
             "Sid": "EnforceConfusedDeputyProtection",
             "Effect": "Deny",
             "Principal": "*",
@@ -26,10 +26,9 @@ The following policy ensures that AWS service principals can only access your re
                 "StringNotEqualsIfExists": {
                     "aws:SourceOrgID": "o-1234567890",
                     "aws:SourceAccount": [
-                        "third-party-account-a",
-                        "third-party-account-b"
+                        "333333333333"
                     ]
-                },  
+                },
                 "Bool": {
                     "aws:PrincipalIsAWSService": "true"
                 }
@@ -91,7 +90,7 @@ The following policy contains multiple statements to enforce consistent access c
             "Principal": "*",
             "Action": "s3:*",
             "Resource": "*",
-            "Condition": {                
+            "Condition": {
                 "NumericLessThan": {
                     "s3:TlsVersion": [
                         "1.2"

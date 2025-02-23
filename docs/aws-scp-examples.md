@@ -4,13 +4,13 @@
 
 Once you have established a security baseline for your AWS account, it is crucial to ensure that the configuration remains secure and cannot be altered by unauthorized users.
 
-- Statement `DenyCloudtrail`: Deny any actions that could disrupt CloudTrail logs to ensure audit trails are preserved.
-- Statement `DenyConfig`: Deny any actions that could disrupt AWS Config.
-- Statement `DenyGuardDutyDeny`: any actions that could disrupt GuardDuty.
-- Statement `DenySecurityHub`: Deny any actions that could disrupt Security Hub.
-- Statement `DenyAccessAnalyzer`: Deny any actions that could disrupt Access Analyzer.
-- Statement `DenyMacie`: Deny any actions that could disrupt Macie.
-- Statement `DenyEventBridge`: Deny any actions that could disrupt EventBridge rules that generate important alerts.
+- Statement `DenyCloudtrail`: Prevents disabling or modifying CloudTrail to ensure audit trails remain intact.
+- Statement `DenyConfig`: Prevents disabling or altering AWS Config to maintain configuration recording, compliance tracking and rules.
+- Statement `DenyGuardDuty`: Prevents disabling GuardDuty or modifying its configuration, ensuring continuous threat detection remains active.
+- Statement `DenySecurityHub`: Prevents changes that could disable Security Hub, ensuring centralized security findings remain accessible.
+- Statement `DenyAccessAnalyzer`: Prevents disabling Access Analyzer, ensuring uninterrupted access analysis and monitoring.
+- Statement `DenyMacie`: Prevents disabling Macie to ensure sensitive data discovery and monitoring remain active.
+- Statement `DenyEventBridge`: Ensures EventBridge rules that generate critical security alerts cannot be modified or deleted.
 
 ```json
 {
@@ -125,7 +125,7 @@ Once you have established a security baseline for your AWS account, it is crucia
         "events:DisableRule",
         "events:RemoveTargets"
       ],
-      "Resource": "arn:aws:events:*:*:rule/default/IMPORTANT-RULE"
+      "Resource": "arn:aws:events:*:*:rule/default/important-rule"
     }
   ]
 }
@@ -195,10 +195,9 @@ The following example SCP prevents users from sharing resources that are not par
 }
 ```
 
-
 ## Require IMDSv2 enabled to launch EC2 instances
 
-The following policy restricts all users from launching EC2 instances without IMDSv2 but allows specific IAM identities to modify instance metadata options.
+The following policy restricts all users from launching EC2 instances without IMDSv2 but allows specific IAM role `admin` from AWS account `111111111111` to modify instance metadata options.
 
 ```json
 {
@@ -241,7 +240,7 @@ The following policy restricts all users from launching EC2 instances without IM
       "Condition": {
         "StringNotLike": {
           "aws:PrincipalARN": [
-            "arn:aws:iam::{ACCOUNT_ID}:{RESOURCE_TYPE}/{RESOURCE_NAME}"
+            "arn:aws:iam::111111111111:role/admin"
           ]
         }
       }
@@ -249,6 +248,7 @@ The following policy restricts all users from launching EC2 instances without IM
   ]
 }
 ```
+Reference: [AWS Official Documentation](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_ec2.html#example-ec2-2)
 
 ## Block root user access
 
@@ -304,9 +304,9 @@ One way to resolve access issues to your AWS account and receive critical securi
 
 ## Deny access to unused regions
 
-This policy denies access to any operations outside of the specified regions. This way you ensure that no resources will be provisioned in another region and you won't need to worry about applying security controls.
+This policy restricts access to operations outside the specified AWS regions. By enforcing this restriction, you ensure that resources are not provisioned in unauthorized regions, reducing the need for additional security controls.
 
-In this exemples lets supposed that my organizations have workloads only in the `us-west-1` and `sa-east-1` regions, so this policy uses the Deny effect to deny access to all requests for operations that don't target one of the two approved regions. 
+In this example, let's assume that our organization operates workloads only in the `us-west-1` and `sa-east-1` regions. The policy applies the Deny effect to block all requests for operations targeting any other region that are not targeted at one of the two approved regions.
 
 The `NotAction` element enables you to list services whose operations (or individual operations) are exempted from this restriction. Because global services have endpoints that are physically hosted by the `us-east-1` region , they must be exempted in this way. With an SCP structured this way, requests made to global services in the `us-east-1` region are allowed if the requested service is included in the `NotAction` element. Any other requests to services in the `us-east-1` region are denied by this example policy.
 
@@ -404,8 +404,7 @@ This policy prevents unauthorized or accidental changes to the region settings, 
       "Condition": {
         "StringNotLike": {
           "aws:PrincipalArn": [
-            "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_AdministratorAccess*",
-            "arn:aws:iam::*:role/OrganizationAccountAccessRole"
+            "arn:aws:iam::*:role/admin"
           ]
         }
       }
@@ -419,8 +418,8 @@ This policy prevents unauthorized or accidental changes to the region settings, 
 The following policy blocks access key creation for the root user and restricts access to other critical IAM actions.
 
 * Statement `DenyCreateRootUserAccessKey`: Deny creation of access keys for the root user.
-* Statement `DenyCreateAccessKey`: Deny creation of any access keys except security roles.
-* Statement `DenyPasswordPolicyUpdate`: Deny update IAM password policy except security roles.
+* Statement `DenyCreateAccessKey`: Deny creation of any access keys except admin role.
+* Statement `DenyPasswordPolicyUpdate`: Deny update IAM password policy except admin role.
 
 ```json
 {
@@ -452,7 +451,7 @@ The following policy blocks access key creation for the root user and restricts 
       "Condition": {
         "StringNotEquals": {
           "aws:PrincipalARN": [
-            "arn:aws:iam::*:role/AUDIT-ROLE-NAME"
+            "arn:aws:iam::*:role/admin"
           ]
         }
       }
@@ -470,7 +469,7 @@ The following policy blocks access key creation for the root user and restricts 
       "Condition": {
         "StringNotEquals": {
           "aws:PrincipalARN": [
-            "arn:aws:iam::*:role/AUDIT-ROLE-NAME"
+            "arn:aws:iam::*:role/admin"
           ]
         }
       }
@@ -481,7 +480,7 @@ The following policy blocks access key creation for the root user and restricts 
 
 ## Restrict update of critical IAM roles
 
-This policy restricts IAM users and roles from making changes to the specified IAM role that can be used to deny modifications of an incident response or other security auditing role.
+This policy restricts IAM users and roles from making changes to specified critical IAM roles with an exception for a admin role.
 
 ```json
 {
@@ -503,11 +502,16 @@ This policy restricts IAM users and roles from making changes to the specified I
         "iam:UpdateRoleDescription"
       ],
       "Resource": [
-        "arn:aws:iam::*:role/AUDIT-ROLE-NAME",
+        "arn:aws:iam::*:role/audit",
         "arn:aws:iam::*:role/OrganizationAccountAccessRole",
         "arn:aws:iam::*:role/stacksets-exec-*",
         "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO*"
-      ]
+      ],
+      "Condition": {
+        "ArnNotLike": {
+          "aws:PrincipalARN":"arn:aws:iam::*:role/admin"
+        }
+      }
     }
   ]
 }
