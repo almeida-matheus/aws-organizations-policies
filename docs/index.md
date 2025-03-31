@@ -9,17 +9,25 @@ Service Control Policies (SCPs) are authorization policies to help you to centra
 SCP provide central control over the maximum permissions available to IAM users and IAM roles in an organization. They help enforce security boundaries and ensure compliance by restricting access to specific services or actions.
 
 ### [Examples](aws-scp-examples.md)
-* [Prevent disabling of security services](aws-scp-examples.html#prevent-security-services-from-being-disabled)
-* [Prevent member accounts from leaving the organizations](aws-scp-examples.html#prevent-member-accounts-from-leaving-the-organizations)
-* [Deny sharing of resources outside the organization](aws-scp-examples.html#deny-sharing-of-resources-outside-the-organization)
-* [Require IMDSv2 enabled to launch EC2 instances](aws-scp-examples.html#require-imdsv2-enabled-to-launch-ec2-instances)
-* [Block root user access](aws-scp-examples.html#block-root-user-access)
 * [Deny contact information changes](aws-scp-examples.html#deny-contact-information-changes)
-* [Deny access to unused regions](aws-scp-examples.html#deny-access-to-unused-regions)
 * [Prevent region enable and disable actions](aws-scp-examples.html#prevent-region-enable-and-disable-actions)
+* [Prevent accounts from leaving the organizations](aws-scp-examples.html#prevent-accounts-from-leaving-the-organizations)
+* [Deny access to unused regions](aws-scp-examples.html#deny-access-to-unused-regions)
+* [Deny sharing of resources outside the organization](aws-scp-examples.html#deny-sharing-of-resources-outside-the-organization)
+* [Prevent disabling of security services](aws-scp-examples.html#prevent-disabling-of-security-services)
+* [Deny creating public secrets](aws-scp-examples.html#deny-creating-public-secrets)
+* [Block root user access](aws-scp-examples.html#block-root-user-access)
 * [Deny critical IAM actions](aws-scp-examples.html#deny-critical-iam-actions)
 * [Restrict update of critical IAM roles](aws-scp-examples.html#restrict-update-of-critical-iam-roles)
-* [Protect default security settings across services](aws-scp-examples.html#protect-default-security-settings-across-services)
+* [Protect S3 default security public access block settings](aws-scp-examples.html#protect-s3-default-security-public-access-block-settings)
+* [Preventing unauthorized AWS Backup modifications](aws-scp-examples.html#preventing-unauthorized-aws-backup-modifications)
+* [Require IMDSv2 enabled to launch EC2 instances](aws-scp-examples.html#require-imdsv2-enabled-to-launch-ec2-instances)
+* [Protect default security settings EBS encryption](aws-scp-examples.html#protect-default-security-settings-ebs-encryption)
+* [Prevent computing log deletion](aws-scp-examples.html#prevent-computing-log-deletion)
+* [Enforce secure AWS lambda function URL authentication](aws-scp-examples.html#enforce-secure-aws-lambda-function-url-authentication)
+* [Restrict billing modifications](aws-scp-examples.html#restrict-billing-modifications)
+* [Prevent modifications to specific cloudformation stacks](aws-scp-examples.html#prevent-modifications-to-specific-cloudformation-stacks)
+* [Restrict network modifications to authorized roles for specific squad](aws-scp-examples.html#restrict-network-modifications-to-authorized-roles-for-specific-squad)
 
 ### Tips
 
@@ -49,7 +57,10 @@ RCP provide central control over the maximum permissions available permissions f
 ### [Examples](aws-rcp-examples.md)
 * [Prevent cross-service confused deputy problem](aws-rcp-examples.html#prevent-cross-service-confused-deputy-problem)
 * [Restrict access to only HTTPS connections to your resources](aws-rcp-examples.html#restrict-access-to-only-https-connections-to-your-resources)
-* [Enforce consistent Amazon S3 bucket policy controls](aws-rcp-examples.html#enforce-consistent-amazon-s3-bucket-policy-controls)
+* [Enforce secure TLS connections for access to S3 buckets](aws-rcp-examples.html#enforce-secure-tls-connections-for-access-to-s3-buckets)
+* [Enforce object settings controls to S3 buckets](aws-rcp-examples.html#enforce-object-settings-controls-to-s3-buckets)
+* [Enforce mandatory encryption to S3 buckets](aws-rcp-examples.html#enforce-mandatory-encryption-to-s3-buckets)
+* [Restrict IAM role assumption to trusted AWS accounts only](aws-rcp-examples.html#restrict-iam-role-assumption-to-trusted-aws-accounts-only)
 
 ### Tips
 
