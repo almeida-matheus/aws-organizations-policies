@@ -14,7 +14,7 @@
       
       
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.10">
     
     
       
@@ -22,7 +22,7 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.8608ea7d.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.4af4bdda.min.css">
       
         
         <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
@@ -237,6 +237,7 @@
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
   
+  
   <span class="md-ellipsis">
     About
     
@@ -248,6 +249,7 @@
       
       <a href="index.html" class="md-nav__link md-nav__link--active">
         
+  
   
   <span class="md-ellipsis">
     About
@@ -392,6 +394,7 @@
       <a href="aws-scp-examples.html" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     SCP Examples
     
@@ -412,6 +415,7 @@
     <li class="md-nav__item">
       <a href="aws-rcp-examples.html" class="md-nav__link">
         
+  
   
   <span class="md-ellipsis">
     RCP Examples
@@ -463,17 +467,25 @@
 <p>SCP provide central control over the maximum permissions available to IAM users and IAM roles in an organization. They help enforce security boundaries and ensure compliance by restricting access to specific services or actions.</p>
 <h3 id="examples"><a href="aws-scp-examples.html">Examples</a></h3>
 <ul>
-<li><a href="aws-scp-examples.html#prevent-security-services-from-being-disabled">Prevent disabling of security services</a></li>
-<li><a href="aws-scp-examples.html#prevent-member-accounts-from-leaving-the-organizations">Prevent member accounts from leaving the organizations</a></li>
-<li><a href="aws-scp-examples.html#deny-sharing-of-resources-outside-the-organization">Deny sharing of resources outside the organization</a></li>
-<li><a href="aws-scp-examples.html#require-imdsv2-enabled-to-launch-ec2-instances">Require IMDSv2 enabled to launch EC2 instances</a></li>
-<li><a href="aws-scp-examples.html#block-root-user-access">Block root user access</a></li>
 <li><a href="aws-scp-examples.html#deny-contact-information-changes">Deny contact information changes</a></li>
-<li><a href="aws-scp-examples.html#deny-access-to-unused-regions">Deny access to unused regions</a></li>
 <li><a href="aws-scp-examples.html#prevent-region-enable-and-disable-actions">Prevent region enable and disable actions</a></li>
+<li><a href="aws-scp-examples.html#prevent-accounts-from-leaving-the-organizations">Prevent accounts from leaving the organizations</a></li>
+<li><a href="aws-scp-examples.html#deny-access-to-unused-regions">Deny access to unused regions</a></li>
+<li><a href="aws-scp-examples.html#deny-sharing-of-resources-outside-the-organization">Deny sharing of resources outside the organization</a></li>
+<li><a href="aws-scp-examples.html#prevent-disabling-of-security-services">Prevent disabling of security services</a></li>
+<li><a href="aws-scp-examples.html#deny-creating-public-secrets">Deny creating public secrets</a></li>
+<li><a href="aws-scp-examples.html#block-root-user-access">Block root user access</a></li>
 <li><a href="aws-scp-examples.html#deny-critical-iam-actions">Deny critical IAM actions</a></li>
 <li><a href="aws-scp-examples.html#restrict-update-of-critical-iam-roles">Restrict update of critical IAM roles</a></li>
-<li><a href="aws-scp-examples.html#protect-default-security-settings-across-services">Protect default security settings across services</a></li>
+<li><a href="aws-scp-examples.html#protect-s3-default-security-public-access-block-settings">Protect S3 default security public access block settings</a></li>
+<li><a href="aws-scp-examples.html#preventing-unauthorized-aws-backup-modifications">Preventing unauthorized AWS Backup modifications</a></li>
+<li><a href="aws-scp-examples.html#require-imdsv2-enabled-to-launch-ec2-instances">Require IMDSv2 enabled to launch EC2 instances</a></li>
+<li><a href="aws-scp-examples.html#protect-default-security-settings-ebs-encryption">Protect default security settings EBS encryption</a></li>
+<li><a href="aws-scp-examples.html#prevent-computing-log-deletion">Prevent computing log deletion</a></li>
+<li><a href="aws-scp-examples.html#enforce-secure-aws-lambda-function-url-authentication">Enforce secure AWS lambda function URL authentication</a></li>
+<li><a href="aws-scp-examples.html#restrict-billing-modifications">Restrict billing modifications</a></li>
+<li><a href="aws-scp-examples.html#prevent-modifications-to-specific-cloudformation-stacks">Prevent modifications to specific cloudformation stacks</a></li>
+<li><a href="aws-scp-examples.html#restrict-network-modifications-to-authorized-roles-for-specific-squad">Restrict network modifications to authorized roles for specific squad</a></li>
 </ul>
 <h3 id="tips">Tips</h3>
 <ul>
@@ -512,7 +524,10 @@
 <ul>
 <li><a href="aws-rcp-examples.html#prevent-cross-service-confused-deputy-problem">Prevent cross-service confused deputy problem</a></li>
 <li><a href="aws-rcp-examples.html#restrict-access-to-only-https-connections-to-your-resources">Restrict access to only HTTPS connections to your resources</a></li>
-<li><a href="aws-rcp-examples.html#enforce-consistent-amazon-s3-bucket-policy-controls">Enforce consistent Amazon S3 bucket policy controls</a></li>
+<li><a href="aws-rcp-examples.html#enforce-secure-tls-connections-for-access-to-s3-buckets">Enforce secure TLS connections for access to S3 buckets</a></li>
+<li><a href="aws-rcp-examples.html#enforce-object-settings-controls-to-s3-buckets">Enforce object settings controls to S3 buckets</a></li>
+<li><a href="aws-rcp-examples.html#enforce-mandatory-encryption-to-s3-buckets">Enforce mandatory encryption to S3 buckets</a></li>
+<li><a href="aws-rcp-examples.html#restrict-iam-role-assumption-to-trusted-aws-accounts-only">Restrict IAM role assumption to trusted AWS accounts only</a></li>
 </ul>
 <h3 id="tips_1">Tips</h3>
 <ul>
@@ -589,10 +604,12 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.tracking", "toc.integrate", "content.code.copy", "content.action.view", "content.action.edit"], "search": "assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+      
+      <script id="__config" type="application/json">{"base": ".", "features": ["navigation.tracking", "toc.integrate", "content.code.copy", "content.action.view", "content.action.edit"], "search": "assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.f1b6f286.min.js"></script>
+      <script src="assets/javascripts/bundle.c8b220af.min.js"></script>
       
     
   </body>
