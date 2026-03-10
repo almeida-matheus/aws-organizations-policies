@@ -204,3 +204,63 @@ The following policy ensures that AWS IAM roles can only be assumption only by r
   ]
 }
 ```
+
+## Limit OIDC role assumptions to specific GitHub organizations
+
+If you are using OIDC to allow GitHub Actions to deploy infrastructure via STS (`sts:AssumeRoleWithWebIdentity`). A critical misconfiguration is leaving the trust policy too broad, allowing any GitHub repository on the internet to assume your role. An RCP can globally enforce that only your company's specific GitHub organization can assume web identity roles.
+
+This policy deny the STS `AssumeRoleWithWebIdentity` if the OIDC subject claim doesn't match the organization named `org-name`, the identity provider token must originate from your specific GitHub organization.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "LimitGitHubOIDCAssumption",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Resource": "*",
+      "Condition": {
+        "StringNotLike": {
+          "token.actions.githubusercontent.com:sub": "repo:org-name/*"
+        }
+      }
+    }
+  ]
+}
+```
+
+## Block the un-tagging of critical security controls
+
+If you are using Attribute-Based Access Control (ABAC) to manage permissions, users might try to bypass your security rules by simply deleting the tags on a resource (e.g., untagging an SQS queue so it no longer falls under a restricted policy).
+
+This policy prevent the modification or removal of essential tags across AWS resources in case if the `aws:TagKeys` condition includes your mandatory security tags like `ManagedBy` or `DataClassification`.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PreventRemovalOfSecurityTags",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": [
+        "s3:PutBucketTagging",
+        "secretsmanager:UntagResource",
+        "kms:UntagResource",
+        "sqs:UntagQueue"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "ForAnyValue:StringEquals": {
+          "aws:TagKeys": [
+            "ManagedBy",
+            "DataClassification"
+          ]
+        }
+      }
+    }
+  ]
+}
+```
