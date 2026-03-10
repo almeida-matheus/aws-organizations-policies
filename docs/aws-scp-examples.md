@@ -345,7 +345,7 @@ Once you have established a security baseline for your AWS account, it is crucia
 
 This policy ensures that all secrets stored in AWS Secrets Manager cannot be publicly exposed, preventing unintended exposure of credentials and other sensitive data. This is possible because AWS provides a setting called Block Public Policy, which prevents policies from being made public.
 
-```
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -533,7 +533,7 @@ AWS Backup provides a centralized solution for managing backups across AWS servi
 
 This policy prevents unauthorized or even accidental modifications to AWS Backup settings, ensuring that backup plans, vaults, and recovery points remain intact and protected.
 
-```
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -712,7 +712,7 @@ AWS billing and account settings contain sensitive financial and administrative 
 
 This policy prevents unauthorized identities from modifying AWS billing and account settings, ensuring that only designated FinOps role have permission to make such changes.
 
-```
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
