@@ -17,7 +17,7 @@
       
       
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.4">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
     
     
       
@@ -290,6 +290,56 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#organizations-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Organizations Policies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Organizations Policies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#differences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Differences
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evaluation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#scp-service-control-policies" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -313,17 +363,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Examples
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#tips" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -339,6 +378,17 @@
     <span class="md-ellipsis">
       
         Quotas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
       
     </span>
   </a>
@@ -374,17 +424,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#examples_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Examples
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#tips_1" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -400,6 +439,17 @@
     <span class="md-ellipsis">
       
         Quotas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
       
     </span>
   </a>
@@ -507,10 +557,108 @@
 
 
 <h1 id="aws-organizations-policies">AWS Organizations Policies</h1>
+<h2 id="organizations-policies">Organizations Policies</h2>
+<p>AWS Organizations allows you to centrally manage a multi-account environment. Two of features of this service for governance are Service Control Policies (SCPs) and Resource Control Policies (RCPs). They serve distinctly different purposes in securing your cloud infrastructure and building a data perimeter.</p>
+<h3 id="differences">Differences</h3>
+<p>Both policies improve security, but they focus on different areas:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Service Control Policies (SCPs)</th>
+<th style="text-align: left;">Resource Control Policies (RCPs)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Target</strong></td>
+<td style="text-align: left;">IAM Identities (Users and Roles)</td>
+<td style="text-align: left;">AWS Resources (e.g., S3 Buckets, KMS Keys)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Primary Goal</strong></td>
+<td style="text-align: left;">Restrict what your identities can do.</td>
+<td style="text-align: left;">Restrict who or what can access your resources.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>External Principals</strong></td>
+<td style="text-align: left;">Does not restrict external accounts from accessing your resources.</td>
+<td style="text-align: left;">Can actively block external accounts from accessing your resources.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Service Support</strong></td>
+<td style="text-align: left;">Applies to all AWS services.</td>
+<td style="text-align: left;">Applies to specific services that support resource-based policies (e.g., S3, STS, KMS, SQS, Secrets Manager, ECR).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="evaluation">Evaluation</h3>
+<p>Understanding how AWS reads all these policies together is the secret to not accidentally locking yourself out of your own resources. </p>
+<p>When a user or role tries to take an action in AWS, they have to pass through a strict set of checkpoints:</p>
+<ul>
+<li>By default every single request starts with an automatic implicit "Deny".</li>
+<li>If any policy anywhere whether it's an SCP, an RCP, or a standard IAM policy explicitly says "Deny," the request is blocked immediately without exceptions.</li>
+<li>SCPs and RCPs act as guardrails that do not grant permissions on their own. Instead, they define the maximum possible access your accounts and resources can have.</li>
+<li>For an action to successfully go through, an IAM or Resource policy must explicitly say "Allow" and the SCP and RCP bouncers must let it pass. This is usually handled by leaving the default policies (<code>FullAWSAccess</code>,<code>RCPFullAWSAccess</code>).</li>
+</ul>
+<p>The Decision Flow:</p>
+<ol>
+<li>Does the SCP and RCP allow this action?<ul>
+<li><em>If No:</em> BLOCKED.</li>
+<li><em>If Yes:</em> Move to Step 2.</li>
+</ul>
+</li>
+<li>Does the SCP, RCP, or any other policy explicitly deny the action?<ul>
+<li><em>If Yes:</em> BLOCKED.</li>
+<li><em>If No:</em> Move to Step 3.</li>
+</ul>
+</li>
+<li>Does the user's IAM policy or the resource's policy explicitly allow the action?<ul>
+<li><em>If No:</em> BLOCKED (because of the default deny).</li>
+<li><em>If Yes:</em> ACCESS GRANTED.</li>
+</ul>
+</li>
+</ol>
+<h3 id="troubleshooting">Troubleshooting</h3>
+<p>When building a strict data perimeter, you might accidentally block legitimate traffic. AWS provides some services to help you troubleshoot policy denials:</p>
+<ul>
+<li><strong>AWS CloudTrail:</strong> Search your event history for <code>AccessDenied</code> or <code>UnauthorizedOperation</code> events. AWS will usually tell you exactly why the action failed (e.g., if it was blocked by a service control policy).</li>
+<li><strong>IAM Policy Simulator:</strong> Select a specific IAM user or role and run a simulation. The simulator will evaluate all attached policies and tell you exactly which statement is denying the action.</li>
+<li><strong>IAM Access Analyzer</strong>: Before applying an RCP to an OU, use Access Analyzer to scan your environment. It generates findings showing exactly who currently has access to your resources so you don't accidentally break production.</li>
+</ul>
 <h2 id="scp-service-control-policies">SCP - Service Control Policies</h2>
 <h3 id="about">About</h3>
-<p>Service Control Policies (SCPs) are authorization policies to help you to centrally manage the security of AWS accounts within an organization.</p>
-<p>SCP provide central control over the maximum permissions available to IAM users and IAM roles in an organization. They help enforce security boundaries and ensure compliance by restricting access to specific services or actions.</p>
+<p>Service Control Policies (SCPs) are authorization policies to help you to centrally manage the security across AWS accounts within an organization.</p>
+<p>SCP provide central control over the maximum permissions available to IAM users and IAM roles (identities) in an organization. They act as a guardrail, helping enforce security boundaries and ensuring compliance by restricting which services or actions identities can perform, regardless of the permissions granted by their individual IAM identity-based policies.</p>
+<h3 id="tips">Tips</h3>
+<ul>
+<li><strong>Understand the Default:</strong> The default SCP <code>FullAWSAccess</code> is automatically created and attached to every entity in your organization (root, OUs, and AWS accounts). It allows all principals to pass SCP evaluation. Use this as a base, then apply Deny statements in additional SCPs to restrict access.</li>
+<li><strong>Management Account Exemption:</strong> SCPs do not affect users or roles in the management account. Therefore, it is strongly recommended not to run operational workloads in the management account, leaving it strictly for billing and organizational governance.</li>
+<li><strong>Test Thoroughly:</strong> Always test your SCPs in a non-production environment to understand their impact before applying them broadly.</li>
+<li><strong>Enforce Least Privilege:</strong> Refine your SCPs to restrict access to only necessary AWS services. Keep in mind that Root user accounts in member accounts are affected by SCPs.</li>
+<li><strong>Use Organizational Units (OUs):</strong> Create multiple OUs instead of attaching all SCPs directly to the root of your organization. This approach allows for more granular restrictions and helps you avoid hitting the quota limits for policy attachments on a single entity.</li>
+<li><strong>Combine Policies:</strong> Each OU can have up to 5 SCPs attached, with a maximum policy size limit of 5,120 characters. To avoid hitting this limit, combine multiple statements into a single SCP where possible.</li>
+<li><strong>Whitespace Matters:</strong> Unlike standard IAM policies, SCPs count whitespace toward the character limit. Be mindful of this and minify your JSON (removing unnecessary spaces and line breaks outside of quotes) to ensure policies stay within the size constraints.</li>
+</ul>
+<h3 id="quotas">Quotas</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Value</th>
+<th style="text-align: left;">Quota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Maximum number of policies attached to root, OU, or account</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr>
+<td style="text-align: left;">Maximum size of a policy document</td>
+<td style="text-align: left;">5120 characters</td>
+</tr>
+</tbody>
+</table>
 <h3 id="examples"><a href="aws-scp-examples.html">Examples</a></h3>
 <ul>
 <li><a href="aws-scp-examples.html#deny-contact-information-changes">Deny contact information changes</a></li>
@@ -533,39 +681,40 @@
 <li><a href="aws-scp-examples.html#prevent-modifications-to-specific-cloudformation-stacks">Prevent modifications to specific cloudformation stacks</a></li>
 <li><a href="aws-scp-examples.html#restrict-network-modifications-to-authorized-roles-for-specific-squad">Restrict network modifications to authorized roles for specific squad</a></li>
 </ul>
-<h3 id="tips">Tips</h3>
+<h2 id="rcp-resource-control-policies">RCP - Resource Control Policies</h2>
+<h3 id="about_1">About</h3>
+<p>Resource Control Policies (RCPs) are authorization policies to help you to centrally enforce a data perimeter across AWS accounts within an organization.</p>
+<p>RCP provide central control over the maximum permissions allowed on resources. They help maintain resource-level security and ensure compliance by restricting whor or what can be performed on specific resources.</p>
+<h3 id="tips_1">Tips</h3>
 <ul>
-<li>Create multiple Organizational Units (OUs) instead of attaching all SCPs to the root of your organization. This approach allows for more granular restrictions and increases the number of SCPs you can attach, due to quota limits.</li>
-<li>Each Organizational Unit (OU) can have up to 5 SCPs attached and maximum policy size limitations of 5120 characters. To avoid hitting this limit, consider combining multiple policies into a single SCP where possible.</li>
-<li>Refine your SCPs and restrict access to only the necessary AWS services using least privilege concept. Keep in mind that Root user accounts are affected by SCPs.</li>
-<li>The default SCP <code>FullAWSAccess</code> is automatically created and attached to every entity in your organization (root, OU and AWS accounts), which allows all principals to perform any actions. Use this as a base and then apply additional SCP to restrict access as needed.</li>
-<li>Always test your SCPs in a non-production environment to understand their impact before applying them broadly.</li>
-<li>Policies do not affect users or roles in the management account, so it is recommended not to run workloads in that account and leave it exclusively for managing accounts.</li>
-<li>Unlike IAM policies, SCPs count whitespace towards the character limit. Be mindful of this when writing policies to ensure they stay within the size constraints.</li>
+<li><strong>Service Support Limitations:</strong> RCPs do not currently support all AWS services. They apply to a specific (but growing) list of services, including Amazon S3, AWS STS, AWS KMS, Amazon SQS, AWS Secrets Manager, Amazon ECR, Amazon OpenSearch Serverless, and Amazon Cognito user pools.</li>
+<li><strong>Service-Linked Roles:</strong> RCPs do not restrict calls made by AWS service-linked roles and cannot manage permissions for resources shared across accounts using AWS RAM.</li>
+<li><strong>Understand the Default:</strong> When RCPs are enabled, the default policy <code>RCPFullAWSAccess</code> is automatically attached to every entity in your organization. This allows all requests to pass RCP evaluation until you add explicit Deny statements.</li>
+<li><strong>Management Account Exemption:</strong> SCPs do not affect users or roles in the management account. Therefore, it is strongly recommended not to run operational workloads in the management account, leaving it strictly for billing and organizational governance.</li>
+<li><strong>Test Thoroughly:</strong> Always test your SCPs in a non-production environment to understand their impact before applying them broadly.</li>
+<li><strong>Use Organizational Units (OUs):</strong> Create multiple OUs instead of attaching all RCPs directly to the root of your organization. This approach allows for more granular restrictions and helps you avoid hitting the quota limits for policy attachments on a single entity.</li>
+<li><strong>Combine Policies:</strong> Each OU can have up to 5 RCPs attached, with a maximum policy size limit of 5,120 characters. To avoid hitting this limit, combine multiple statements into a single RCPs where possible.</li>
+<li><strong>Whitespace Matters:</strong> Unlike standard IAM policies, RCPs count whitespace toward the character limit. Be mindful of this and minify your JSON (removing unnecessary spaces and line breaks outside of quotes) to ensure policies stay within the size constraints.</li>
 </ul>
-<h3 id="quotas">Quotas</h3>
+<h3 id="quotas_1">Quotas</h3>
 <table>
 <thead>
 <tr>
-<th>Value</th>
-<th>Quota</th>
+<th style="text-align: left;">Value</th>
+<th style="text-align: left;">Quota</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Maximum number of policies attached to root, OU or account</td>
-<td>5</td>
+<td style="text-align: left;">Maximum number of policies attached to root, OU, or account</td>
+<td style="text-align: left;">5</td>
 </tr>
 <tr>
-<td>Maximum size of a policy document</td>
-<td>5120 characters</td>
+<td style="text-align: left;">Maximum size of a policy document</td>
+<td style="text-align: left;">5120 characters</td>
 </tr>
 </tbody>
 </table>
-<h2 id="rcp-resource-control-policies">RCP - Resource Control Policies</h2>
-<h3 id="about_1">About</h3>
-<p>Resource Control Policies (RCPs) are authorization policies to help you to centrally manage the security of AWS accounts within an organization.</p>
-<p>RCP provide central control over the maximum permissions available permissions for resources in an organization. They help maintain resource-level security and ensure compliance by restricting what actions can be performed on specific resources.</p>
 <h3 id="examples_1"><a href="aws-rcp-examples.html">Examples</a></h3>
 <ul>
 <li><a href="aws-rcp-examples.html#prevent-cross-service-confused-deputy-problem">Prevent cross-service confused deputy problem</a></li>
@@ -574,36 +723,9 @@
 <li><a href="aws-rcp-examples.html#enforce-object-settings-controls-to-s3-buckets">Enforce object settings controls to S3 buckets</a></li>
 <li><a href="aws-rcp-examples.html#enforce-mandatory-encryption-to-s3-buckets">Enforce mandatory encryption to S3 buckets</a></li>
 <li><a href="aws-rcp-examples.html#restrict-iam-role-assumption-to-trusted-aws-accounts-only">Restrict IAM role assumption to trusted AWS accounts only</a></li>
+<li><a href="aws-rcp-examples.html#limit-oidc-role-assumptions-to-specific-github-organizations">Limit OIDC role assumptions to specific GitHub organizations</a></li>
+<li><a href="aws-rcp-examples.html#block-the-un-tagging-of-critical-security-controls">Block the un-tagging of critical security controls</a></li>
 </ul>
-<h3 id="tips_1">Tips</h3>
-<ul>
-<li>Create multiple Organizational Units (OUs) instead of attaching all RCPs to the root of your organization. This approach allows for more granular restrictions and increases the number of RCPs you can attach, due to quota limits.</li>
-<li>Each Organizational Unit (OU) can have up to 5 RCPs attached and maximum policy size limitations of 5120 characters. To avoid hitting this limit, consider combining multiple policies into a single RCP where possible.</li>
-<li>The default RCP <code>FRCPullAWSAccess</code> is automatically created and attached to every entity in your organization (root, OU and AWS accounts), which allows all principals to perform any actions. Use this as a base and then apply additional RCP to restrict access as needed.</li>
-<li>Policies does not support all AWS services, currently only works with specific AWS services: S3, STS, KMS, SQS and Secrets Manager.</li>
-<li>Policies does not affect service-linked roles and cannot manage permissions for resources shared across accounts using AWS RAM.</li>
-<li>Policies do not affect resources in the management account, so it is recommended not to run workloads in that account and leave it exclusively for managing accounts.</li>
-<li>Always test your RCPs in a non-production environment to understand their impact before applying them broadly.</li>
-</ul>
-<h3 id="quotas_1">Quotas</h3>
-<table>
-<thead>
-<tr>
-<th>Value</th>
-<th>Quota</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Maximum number of policies attached to root, OU or account</td>
-<td>5</td>
-</tr>
-<tr>
-<td>Maximum size of a policy document</td>
-<td>5120 characters</td>
-</tr>
-</tbody>
-</table>
 
 
 
