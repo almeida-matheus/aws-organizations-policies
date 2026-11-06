@@ -162,6 +162,20 @@ def resolve_actions(stmt, ref):
     return errors, matched
 
 
+def resourceless_actions(stmt, ref):
+    """Actions with no resource type in the reference; an RCP may not apply to them."""
+    names = []
+    for action in as_list(stmt.get("Action", [])):
+        prefix, _, name = action.partition(":")
+        service = ref.get(prefix)
+        if not service or "*" in name:
+            continue
+        found = service["actions"].get(name.lower())
+        if found and not found.get("Resources"):
+            names.append(action)
+    return names
+
+
 def supported_keys(service, action):
     patterns = [key_pattern(k) for k in action.get("ActionConditionKeys", [])]
     for res in action.get("Resources", []):
@@ -264,13 +278,18 @@ def main():
                 action_errors, matched = resolve_actions(stmt, ref)
                 errors += action_errors
                 errors += check_conditions(stmt, ref, matched)
+                if spec["type"] == "RCP":
+                    notes += [f"{a} lists no resource type, and RCPs only apply to authorized "
+                              "resources; confirm with a test that the RCP affects it"
+                              for a in resourceless_actions(stmt, ref)]
 
             size = len(json.dumps(policy, separators=(",", ":")))
             if size > spec["max_size"]:
                 errors.append(f"minified size {size} > {spec['max_size']}")
 
             if args.access_analyzer and not errors:
-                aa_errors, notes = access_analyzer(policy, spec["aa_type"])
+                aa_errors, aa_notes = access_analyzer(policy, spec["aa_type"])
+                notes += aa_notes
                 errors += aa_errors
 
             if errors:

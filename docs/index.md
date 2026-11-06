@@ -135,6 +135,7 @@ jq -c . policy.json
 | IAM | [Deny Identity Store changes when users come from an IdP](aws-scp-examples.md#deny-identity-store-changes-when-users-come-from-an-idp) |
 | Security services | [Deny disabling security services](aws-scp-examples.md#deny-disabling-security-services) |
 | Data protection | [Enforce the resource perimeter](aws-scp-examples.md#enforce-the-resource-perimeter) |
+| Data protection | [Protect data perimeter tags](aws-scp-examples.md#protect-data-perimeter-tags) |
 | Data protection | [Deny public secrets](aws-scp-examples.md#deny-public-secrets) |
 | Data protection | [Protect S3 account-level Block Public Access](aws-scp-examples.md#protect-s3-account-level-block-public-access) |
 | Data protection | [Require S3 buckets in the account regional namespace](aws-scp-examples.md#require-s3-buckets-in-the-account-regional-namespace) |

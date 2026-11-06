@@ -102,7 +102,7 @@ Notes:
 - Include the home Region of IAM Identity Center and AWS Control Tower in the approved list.
 - If you use Control Tower, its Region deny control does the same thing and is maintained by AWS.
 - New global services show up over time. If something breaks with `AccessDenied` on `us-east-1`, check whether its prefix needs to go into `NotAction`.
-- Amazon Bedrock [cross-Region inference](https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html) sends requests to other Regions in the same geography, which a plain Region deny blocks. `DenyBedrockOutsideApprovedRegions` handles that: Bedrock calls to other Regions are only allowed through `us.*` inference profiles. Use the prefix of your geography, and keep in mind that `global.*` profiles can route to any commercial Region.
+- Amazon Bedrock [cross-Region inference](https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html) sends requests to other Regions in the same geography, which a plain Region deny blocks. `DenyBedrockOutsideApprovedRegions` handles that: Bedrock calls to other Regions are only allowed through `us.*` inference profiles; use the prefix of your geography. [Global profiles](https://docs.aws.amazon.com/bedrock/latest/userguide/global-cross-region-inference.html) (`global.*`) stay blocked, because they can send data to any commercial Region. To allow them, add `arn:aws:bedrock:*:*:inference-profile/global.*` to `bedrock:InferenceProfileArn`.
 
 ```json
 {
@@ -235,7 +235,9 @@ With centralized root access enabled you can also delete the root credentials of
 
 Access keys and console passwords for IAM users are the most common source of leaked AWS credentials. Use IAM Identity Center for people and roles for workloads, and block the creation of long-term credentials.
 
-`iam:CreateServiceSpecificCredential` covers CodeCommit, Keyspaces and long-term Amazon Bedrock API keys.
+`iam:CreateServiceSpecificCredential` covers CodeCommit, Keyspaces and long-term Amazon Bedrock API keys. Reactivating an old access key (`UpdateAccessKey`) and uploading SSH keys or signing certificates are blocked too.
+
+The SES console creates an IAM user with an access key when you generate SMTP credentials, so that needs the `admin` role.
 
 ```json
 {
@@ -250,8 +252,12 @@ Access keys and console passwords for IAM users are the most common source of le
         "iam:CreateServiceSpecificCredential",
         "iam:CreateUser",
         "iam:DeleteAccountPasswordPolicy",
+        "iam:ResetServiceSpecificCredential",
+        "iam:UpdateAccessKey",
         "iam:UpdateAccountPasswordPolicy",
-        "iam:UpdateLoginProfile"
+        "iam:UpdateLoginProfile",
+        "iam:UploadSigningCertificate",
+        "iam:UploadSSHPublicKey"
       ],
       "Resource": "*",
       "Condition": {
@@ -271,6 +277,8 @@ A new identity source is a back door: whoever controls it can get into the accou
 - SAML and OIDC providers in IAM
 - IAM Roles Anywhere trust anchors (any certificate signed by the anchor's CA can get credentials)
 - IAM Identity Center account instances (`sso:CreateInstance`), a separate Identity Center that lives inside a member account and outside the central one
+
+Cognito identity pools also hand out AWS credentials. Unauthenticated access is covered by the [Cognito RCP](aws-rcp-examples.md#deny-unauthenticated-cognito-identity-pool-access); if no team builds apps with identity pools, add `cognito-identity:CreateIdentityPool` here as well.
 
 ```json
 {
@@ -408,7 +416,9 @@ Lets application teams create their own roles without being able to create one m
 - `DenyBoundaryRemoval`: the boundary can't be removed.
 - `ProtectBoundaryPolicy`: the boundary policy itself can't be edited.
 
-Create `workload-boundary` in every account before attaching. The StackSets execution role is exempted so the baseline can deploy the boundary and the platform roles. If another pipeline creates platform roles without a boundary, add its role to the exceptions. The boundary only limits roles; to keep teams from passing existing powerful roles to services, keep [Protect critical IAM roles](#protect-critical-iam-roles) attached as well.
+Create `workload-boundary` in every account before attaching. The StackSets execution role is exempted so the baseline can deploy the boundary and the platform roles. If another pipeline creates platform roles without a boundary, add its role to the exceptions. `iam:CreatePolicy` is denied for the boundary's name too, so nobody can create a permissive `workload-boundary` in a new account before the baseline gets there.
+
+This only covers roles. It depends on two other policies: [Deny IAM users](#deny-iam-users-and-long-term-credentials), since users and groups have no boundary here, and [Protect critical IAM roles](#protect-critical-iam-roles), which stops teams from passing powerful roles to services and from editing the `/platform/` policies those roles use. Customer managed policies attached to platform roles outside `/platform/` can still be edited.
 
 ```json
 {
@@ -456,6 +466,7 @@ Create `workload-boundary` in every account before attaching. The StackSets exec
       "Sid": "ProtectBoundaryPolicy",
       "Effect": "Deny",
       "Action": [
+        "iam:CreatePolicy",
         "iam:CreatePolicyVersion",
         "iam:DeletePolicy",
         "iam:DeletePolicyVersion",
@@ -533,7 +544,7 @@ With [outbound identity federation](https://docs.aws.amazon.com/IAM/latest/UserG
 
 > Reference: [AWS SCP examples](https://github.com/aws-samples/service-control-policy-examples/blob/main/Deny-changes-to-security-services/Deny-IdentityStore-mutations-for-SCIM-provisioned-directories.json)
 
-When IAM Identity Center gets its users and groups from Okta, Entra ID or Google through SCIM, the IdP is the only source of truth. Nobody should create a user or add someone to a group directly in Identity Center. That's exactly what an attacker with access to the Identity Center admin account would do to give themselves a permission set while staying invisible in the IdP.
+When IAM Identity Center gets its users and groups from Okta, Entra ID or Google through SCIM, the IdP is the only source of truth. Nobody should create a user or add someone to a group directly in Identity Center. That's what an attacker with access to the Identity Center admin account would do to slip into a privileged group while staying invisible in the IdP. Permission sets and account assignments (`sso:*`) are not covered here, since teams often manage them with IaC from the same account; lock those down with your own exception role if they don't.
 
 SCIM provisioning uses its own token, not IAM, so it keeps working. Attach this to the account that is the delegated administrator for Identity Center. SCPs don't apply to the management account, so if Identity Center is administered from there, move it to a delegated admin first.
 
@@ -571,13 +582,13 @@ Keeps detection and audit tooling running after the baseline is in place. Only t
 | Sid | Protects |
 | :--- | :--- |
 | `DenyCloudTrail` | Trails and CloudTrail Lake event data stores |
-| `DenyConfig` | Recorder, delivery channel, rules, aggregators, remediation |
-| `DenyGuardDuty` | Detector, filters (auto-archive), trusted IP lists, membership |
-| `DenySecurityHub` | Hub, standards, controls, automation rules, membership |
+| `DenyConfig` | Recorder, delivery channel, rules, conformance packs, aggregators, remediation |
+| `DenyGuardDuty` | Detector and member detectors, organization settings, filters (auto-archive), trusted IP lists, membership |
+| `DenySecurityHub` | Hub, standards, controls, central configuration policies, automation rules (a rule can suppress every finding), membership |
 | `DenyAccessAnalyzer` | Analyzers and archive rules that hide findings |
 | `DenyMacie` | Macie session and membership |
-| `DenyInspector` | Inspector scanning and membership |
-| `DenyEventBridge` | Rules that route security alerts (replace `security-alerts-*`) |
+| `DenyInspector` | Inspector scanning, configuration, suppression filters and membership |
+| `DenyEventBridge` | Rules that route security alerts and their targets (replace `security-alerts-*`) |
 
 If you use an organization trail and Control Tower, part of this is already enforced, but the SCP also covers trails and settings created outside them. [Security Hub, GuardDuty and Inspector policies](index.md#other-policy-types) in Organizations turn these services on in every account; this SCP keeps anyone from weakening them afterwards.
 
@@ -612,12 +623,14 @@ If you use an organization trail and Control Tower, part of this is already enfo
         "config:DeleteConfigRule",
         "config:DeleteConfigurationAggregator",
         "config:DeleteConfigurationRecorder",
+        "config:DeleteConformancePack",
         "config:DeleteDeliveryChannel",
         "config:DeleteEvaluationResults",
         "config:DeleteOrganizationConfigRule",
         "config:DeleteRemediationConfiguration",
         "config:DeleteRetentionConfiguration",
         "config:DeleteServiceLinkedConfigurationRecorder",
+        "config:DisassociateResourceTypes",
         "config:PutConfigRule",
         "config:PutConfigurationAggregator",
         "config:PutConfigurationRecorder",
@@ -658,6 +671,8 @@ If you use an organization trail and Control Tower, part of this is already enfo
         "guardduty:UpdateFilter",
         "guardduty:UpdateIPSet",
         "guardduty:UpdateMalwareScanSettings",
+        "guardduty:UpdateMemberDetectors",
+        "guardduty:UpdateOrganizationConfiguration",
         "guardduty:UpdatePublishingDestination",
         "guardduty:UpdateThreatIntelSet"
       ],
@@ -674,6 +689,9 @@ If you use an organization trail and Control Tower, part of this is already enfo
       "Action": [
         "securityhub:BatchDeleteAutomationRules",
         "securityhub:BatchDisableStandards",
+        "securityhub:BatchUpdateAutomationRules",
+        "securityhub:BatchUpdateStandardsControlAssociations",
+        "securityhub:CreateAutomationRule",
         "securityhub:DeleteConfigurationPolicy",
         "securityhub:DeleteInvitations",
         "securityhub:DeleteMembers",
@@ -683,6 +701,7 @@ If you use an organization trail and Control Tower, part of this is already enfo
         "securityhub:DisassociateFromAdministratorAccount",
         "securityhub:DisassociateFromMasterAccount",
         "securityhub:DisassociateMembers",
+        "securityhub:UpdateConfigurationPolicy",
         "securityhub:UpdateOrganizationConfiguration",
         "securityhub:UpdateSecurityHubConfiguration",
         "securityhub:UpdateStandardsControl"
@@ -735,9 +754,12 @@ If you use an organization trail and Control Tower, part of this is already enfo
       "Sid": "DenyInspector",
       "Effect": "Deny",
       "Action": [
+        "inspector2:CreateFilter",
         "inspector2:Disable",
         "inspector2:DisableDelegatedAdminAccount",
-        "inspector2:DisassociateMember"
+        "inspector2:DisassociateMember",
+        "inspector2:UpdateConfiguration",
+        "inspector2:UpdateOrganizationConfiguration"
       ],
       "Resource": "*",
       "Condition": {
@@ -753,6 +775,7 @@ If you use an organization trail and Control Tower, part of this is already enfo
         "events:DeleteRule",
         "events:DisableRule",
         "events:PutRule",
+        "events:PutTargets",
         "events:RemoveTargets"
       ],
       "Resource": "arn:aws:events:*:*:rule/security-alerts-*",
@@ -802,6 +825,64 @@ The [identity perimeter RCP](aws-rcp-examples.md#enforce-the-identity-perimeter)
             "222222222222"
           ],
           "aws:PrincipalTag/dp:exclude:resource": "true"
+        }
+      }
+    }
+  ]
+}
+```
+
+### Protect data perimeter tags
+
+The data perimeter policies use tags as switches: `dp:exclude:*` takes a role or resource out of a perimeter and `dp:include:network` puts a role in. If anyone can set them, anyone can opt out. This denies adding or removing any `dp:*` tag on roles and on the resources the RCPs cover, including tags passed when the resource is created, except for `admin` and the StackSets baseline. The [Protect security tags](aws-rcp-examples.md#protect-security-tags) RCP blocks the same tags as session tags, which would otherwise override the role's own.
+
+S3 has a gap: `s3:PutBucketTagging`, the API most tools use, doesn't support `aws:TagKeys`, so a bucket can still be tagged. That alone doesn't expose it, because sharing a bucket also takes a bucket policy change, which [Protect S3 bucket security settings](aws-rcp-examples.md#protect-s3-bucket-security-settings) limits to `admin` and `iac-deploy`.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyPerimeterTagChanges",
+      "Effect": "Deny",
+      "Action": [
+        "dynamodb:CreateTable",
+        "dynamodb:TagResource",
+        "dynamodb:UntagResource",
+        "ecr:CreateRepository",
+        "ecr:TagResource",
+        "ecr:UntagResource",
+        "iam:CreateRole",
+        "iam:TagRole",
+        "iam:UntagRole",
+        "kms:CreateKey",
+        "kms:TagResource",
+        "kms:UntagResource",
+        "logs:CreateLogGroup",
+        "logs:TagLogGroup",
+        "logs:TagResource",
+        "logs:UntagLogGroup",
+        "logs:UntagResource",
+        "s3:CreateBucket",
+        "s3:TagResource",
+        "s3:UntagResource",
+        "secretsmanager:CreateSecret",
+        "secretsmanager:TagResource",
+        "secretsmanager:UntagResource",
+        "sqs:CreateQueue",
+        "sqs:TagQueue",
+        "sqs:UntagQueue"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "ForAnyValue:StringLike": {
+          "aws:TagKeys": "dp:*"
+        },
+        "ArnNotLike": {
+          "aws:PrincipalArn": [
+            "arn:aws:iam::*:role/admin",
+            "arn:aws:iam::*:role/stacksets-exec-*"
+          ]
         }
       }
     }
@@ -889,7 +970,9 @@ Anything that creates buckets with your credentials and a global name stops work
 
 > Reference: [AWS SCP examples](https://github.com/aws-samples/service-control-policy-examples/blob/main/Sensitive-data-protection/Deny-RAM-from-sharing-resources-to-external-accounts.json)
 
-- `DenyExternalShares`: blocks resource shares that allow principals outside the organization.
+- `DenyExternalSharesOnCreate`: `allowExternalPrincipals` [defaults to true](https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html), so creating a share is denied unless the request sets it to `false`.
+- `DenyExternalSharesOnUpdate`: turning on external principals for an existing share.
+- `DenyAddingToExternalShares`: adding principals or resources to a share that already allows external principals.
 - `DenyShareInvitations`: blocks accepting share invitations. With RAM sharing enabled for the organization, shares between your own accounts don't use invitations, so this only blocks shares coming from outside.
 
 ```json
@@ -897,16 +980,35 @@ Anything that creates buckets with your credentials and a global name stops work
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "DenyExternalShares",
+      "Sid": "DenyExternalSharesOnCreate",
       "Effect": "Deny",
-      "Action": [
-        "ram:CreateResourceShare",
-        "ram:UpdateResourceShare"
-      ],
+      "Action": "ram:CreateResourceShare",
+      "Resource": "*",
+      "Condition": {
+        "BoolIfExists": {
+          "ram:RequestedAllowsExternalPrincipals": "true"
+        }
+      }
+    },
+    {
+      "Sid": "DenyExternalSharesOnUpdate",
+      "Effect": "Deny",
+      "Action": "ram:UpdateResourceShare",
       "Resource": "*",
       "Condition": {
         "Bool": {
           "ram:RequestedAllowsExternalPrincipals": "true"
+        }
+      }
+    },
+    {
+      "Sid": "DenyAddingToExternalShares",
+      "Effect": "Deny",
+      "Action": "ram:AssociateResourceShare",
+      "Resource": "*",
+      "Condition": {
+        "Bool": {
+          "ram:AllowsExternalPrincipals": "true"
         }
       }
     },
@@ -973,8 +1075,11 @@ Aurora, DocumentDB and Neptune instances are excluded because they inherit encry
     {
       "Sid": "RequireRdsEncryption",
       "Effect": "Deny",
-      "Action": "rds:CreateDBInstance",
-      "Resource": "*",
+      "Action": [
+        "rds:CreateDBInstance",
+        "rds:RestoreDBInstanceFromS3"
+      ],
+      "Resource": "arn:aws:rds:*:*:db:*",
       "Condition": {
         "BoolIfExists": {
           "rds:StorageEncrypted": "false"
@@ -1077,7 +1182,7 @@ AWS Backup uses these same actions for cross-account copies, through its service
 
 A known ransomware technique with KMS: create a key with imported key material, re-encrypt data with it, then delete the material. AWS can't recover the key, so only the attacker, who kept a copy, can decrypt. An external key store does the same with a key outside AWS.
 
-Most organizations never need either. This denies creating keys with external material or in an external key store, importing material, and managing custom key stores, except for the `admin` role. Using a key from another account for the same trick is blocked by the [resource perimeter](#enforce-the-resource-perimeter).
+Most organizations never need either. This denies creating keys with external material or in an external key store, importing material, and managing custom key stores, except for the `admin` role. It also denies creating a key with the lockout safety check bypassed, which can leave a key nobody can manage. That one has to be in an SCP: `CreateKey` has no resource yet, so RCPs don't apply to it. Using a key from another account for the same trick is blocked by the [resource perimeter](#enforce-the-resource-perimeter).
 
 ```json
 {
@@ -1106,6 +1211,7 @@ Most organizations never need either. This denies creating keys with external ma
       "Action": [
         "kms:ConnectCustomKeyStore",
         "kms:CreateCustomKeyStore",
+        "kms:DeleteCustomKeyStore",
         "kms:ImportKeyMaterial",
         "kms:UpdateCustomKeyStore"
       ],
@@ -1113,6 +1219,17 @@ Most organizations never need either. This denies creating keys with external ma
       "Condition": {
         "ArnNotLike": {
           "aws:PrincipalArn": "arn:aws:iam::*:role/admin"
+        }
+      }
+    },
+    {
+      "Sid": "DenyLockoutSafetyBypass",
+      "Effect": "Deny",
+      "Action": "kms:CreateKey",
+      "Resource": "*",
+      "Condition": {
+        "Bool": {
+          "kms:BypassPolicyLockoutSafetyCheck": "true"
         }
       }
     }
@@ -1241,7 +1358,7 @@ Turn on the settings before attaching the policy. Only the `admin` role can chan
 
 A function URL with `AuthType=NONE` is a public HTTPS endpoint. This denies creating or updating function URLs without IAM auth, and adding resource policy statements that open an existing URL to the public.
 
-The condition matches on `NONE` instead of "not `AWS_IAM`" so regular `lambda:AddPermission` calls, which don't carry this key, are not affected.
+The condition matches on `NONE` instead of "not `AWS_IAM`" so regular `lambda:AddPermission` calls, which don't carry this key, are not affected. Function URLs that already use `NONE` are not changed, so find them before attaching (`aws lambda list-function-url-configs`).
 
 ```json
 {
@@ -1302,9 +1419,9 @@ This denies creating or importing key pairs and pushing keys with Instance Conne
 
 ### Deny log deletion
 
-Deleting logs is how an attacker covers their tracks. This protects VPC Flow Logs and CloudWatch Logs, including subscription filters that forward logs to a SIEM. Changing the retention is blocked as well, since setting it to one day has the same effect as deleting.
+Deleting logs is how an attacker covers their tracks. This protects VPC Flow Logs and CloudWatch Logs, including the subscription filters and account-level policies that forward logs to a SIEM. Changing a retention or a subscription filter is blocked as well: a one-day retention has the same effect as deleting, and rewriting a filter quietly sends the logs somewhere else.
 
-Infrastructure as code usually needs to delete log groups and set their retention, so the `iac-deploy` role is exempted. With AWS CDK, deployments run as the bootstrap role `cdk-*-cfn-exec-role-*`, so add it too. The CDK `logRetention` property sets retention from a Lambda function with its own role, which gets denied; define the log group explicitly so CloudFormation sets the retention instead. For a stricter version, scope `Resource` to the log groups that matter (for example `arn:aws:logs:*:*:log-group:/security/*`) and remove the exceptions.
+Infrastructure as code usually needs to delete log groups and set their retention, so the `iac-deploy` role is exempted. With AWS CDK, deployments run as the bootstrap role `cdk-*-cfn-exec-role-*`. If you add it, also add it to [Protect critical IAM roles](#protect-critical-iam-roles), and keep in mind that anyone who can pass it to CloudFormation gets the exception. The CDK `logRetention` property sets retention from a Lambda function with its own role, which gets denied; define the log group explicitly so CloudFormation sets the retention instead. For a stricter version, scope `Resource` to the log groups that matter (for example `arn:aws:logs:*:*:log-group:/security/*`) and remove the exceptions.
 
 ```json
 {
@@ -1315,10 +1432,12 @@ Infrastructure as code usually needs to delete log groups and set their retentio
       "Effect": "Deny",
       "Action": [
         "ec2:DeleteFlowLogs",
+        "logs:DeleteAccountPolicy",
         "logs:DeleteLogGroup",
         "logs:DeleteLogStream",
         "logs:DeleteSubscriptionFilter",
-        "logs:PutRetentionPolicy"
+        "logs:PutRetentionPolicy",
+        "logs:PutSubscriptionFilter"
       ],
       "Resource": "*",
       "Condition": {
@@ -1345,7 +1464,7 @@ Only the `network` role can change VPC topology, routing, internet exposure, hyb
 - `DenyVpcChanges`: VPCs, subnets, route tables, NACLs, internet/NAT gateways, peering, Transit Gateway attachments, VPN, VPC Block Public Access and Global Accelerator.
 - `DenyDnsChanges`: Route 53 hosted zones, records, Resolver and domain registration.
 
-Security groups are left out on purpose: application teams usually manage their own. If you allow application teams to manage DNS records, remove `route53:ChangeResourceRecordSets` (matched by `route53:Change*`).
+DHCP options and VPC endpoints are included: DHCP options can point a VPC's DNS anywhere, and gateway endpoints write routes. If application teams create their own interface endpoints, remove `ec2:CreateVpcEndpoint` and `ec2:ModifyVpcEndpoint`. Security groups are left out on purpose: application teams usually manage their own. If you allow application teams to manage DNS records, remove `route53:ChangeResourceRecordSets` (matched by `route53:Change*`).
 
 ```json
 {
@@ -1357,11 +1476,13 @@ Security groups are left out on purpose: application teams usually manage their 
       "Action": [
         "ec2:AcceptTransitGatewayPeeringAttachment",
         "ec2:AcceptVpcPeeringConnection",
+        "ec2:AssociateDhcpOptions",
         "ec2:AssociateRouteTable",
         "ec2:AttachInternetGateway",
         "ec2:CreateCustomerGateway",
         "ec2:CreateDefaultSubnet",
         "ec2:CreateDefaultVpc",
+        "ec2:CreateDhcpOptions",
         "ec2:CreateEgressOnlyInternetGateway",
         "ec2:CreateInternetGateway",
         "ec2:CreateNatGateway",
@@ -1373,6 +1494,7 @@ Security groups are left out on purpose: application teams usually manage their 
         "ec2:CreateTransitGatewayVpcAttachment",
         "ec2:CreateVpc",
         "ec2:CreateVpcBlockPublicAccessExclusion",
+        "ec2:CreateVpcEndpoint",
         "ec2:CreateVpcPeeringConnection",
         "ec2:CreateVpnConnection",
         "ec2:CreateVpnGateway",
@@ -1388,10 +1510,12 @@ Security groups are left out on purpose: application teams usually manage their 
         "ec2:ModifySubnetAttribute",
         "ec2:ModifyVpcAttribute",
         "ec2:ModifyVpcBlockPublicAccessOptions",
+        "ec2:ModifyVpcEndpoint",
         "ec2:ReplaceNetworkAclAssociation",
         "ec2:ReplaceNetworkAclEntry",
         "ec2:ReplaceRoute",
         "ec2:ReplaceRouteTableAssociation",
+        "globalaccelerator:Add*",
         "globalaccelerator:Create*",
         "globalaccelerator:Update*"
       ],
@@ -1415,6 +1539,7 @@ Security groups are left out on purpose: application teams usually manage their 
         "route53domains:RegisterDomain",
         "route53domains:TransferDomain*",
         "route53domains:UpdateDomainNameservers",
+        "route53resolver:Associate*",
         "route53resolver:Create*",
         "route53resolver:Delete*",
         "route53resolver:Disassociate*",
@@ -1435,7 +1560,8 @@ Security groups are left out on purpose: application teams usually manage their 
 
 Databases and Kubernetes API servers reachable from the internet are a frequent finding in breach reports. This denies creating RDS instances with `PubliclyAccessible=true` and EKS clusters with a public API endpoint.
 
-- When `PubliclyAccessible` is omitted, RDS decides based on the subnets, so the statement also denies requests that don't set it. Templates have to set it to `false`. DocumentDB and Neptune also use the RDS API but can't be public and don't take the parameter, so they are excluded by engine.
+- When `PubliclyAccessible` is omitted, RDS decides based on the subnets, so the statement also denies requests that don't set it. Templates have to set it to `false`. DocumentDB and Neptune also use the RDS API but can't be public and don't take the parameter, so they are excluded by engine. AWS Backup restores through its service role without setting the parameter, so that role is exempted.
+- `Resource` is limited to DB instances. `CreateDBInstance` also authorizes parameter, option and subnet groups, which don't carry these keys, so a `*` resource could deny every request.
 - EKS creates a public endpoint when `endpointPublicAccess` is omitted, so `CreateCluster` uses `BoolIfExists` for the same reason. `UpdateClusterConfig` uses `Bool` so updates that don't touch the endpoint keep working. If you use public endpoints restricted to a few CIDRs, this policy is not for you.
 - `rds:ModifyDBInstance` doesn't support `rds:PubliclyAccessible`, so an existing instance can still be made public. Use the Config rule `rds-instance-public-access-check` to catch that.
 
@@ -1450,9 +1576,10 @@ Databases and Kubernetes API servers reachable from the internet are a frequent 
         "rds:CreateDBInstance",
         "rds:CreateDBInstanceReadReplica",
         "rds:RestoreDBInstanceFromDBSnapshot",
+        "rds:RestoreDBInstanceFromS3",
         "rds:RestoreDBInstanceToPointInTime"
       ],
-      "Resource": "*",
+      "Resource": "arn:aws:rds:*:*:db:*",
       "Condition": {
         "BoolIfExists": {
           "rds:PubliclyAccessible": "true"
@@ -1462,6 +1589,9 @@ Databases and Kubernetes API servers reachable from the internet are a frequent 
             "docdb",
             "neptune"
           ]
+        },
+        "ArnNotLike": {
+          "aws:PrincipalArn": "arn:aws:iam::*:role/service-role/AWSBackupDefaultServiceRole"
         }
       }
     },
@@ -1495,13 +1625,14 @@ Databases and Kubernetes API servers reachable from the internet are a frequent 
 
 > Reference: [AWS SCP examples](https://github.com/aws-samples/service-control-policy-examples/blob/main/Protect-cloud-platform-resource/Deny-use-of-IAM-Identity-Center-credentials-from-unexpected-networks.json)
 
-Phishing kits and infostealers no longer go after passwords. They take the session after MFA, and an Identity Center session works from anywhere until it expires. This denies requests made with Identity Center roles unless they come from the corporate CIDR or from your VPCs, so a stolen session is useless outside your network.
+Phishing kits and infostealers no longer go after passwords. They take the session after MFA, and an Identity Center session works from anywhere until it expires. This denies requests made with Identity Center roles unless they come from the corporate CIDR or through VPC endpoints in your VPCs, so a stolen session is useless outside your network.
 
 - Calls that AWS services make on your behalf (`aws:ViaAWSService`) are not affected.
 - As in the AWS example, data plane actions such as `rds-db:connect`, EFS client access and OpenSearch requests are left out in `NotAction`. Access to those is already limited by the network of the database or file system.
 - Only Identity Center roles are matched, so workloads and pipelines are not affected. Remote users need the VPN, so plan for it before attaching.
 - Include your IPv6 ranges if the network has IPv6. Many AWS endpoints are dual-stack, and the request may reach AWS over IPv6.
-- AWS CloudShell sends requests from AWS's own addresses, so it stops working unless you run it in a VPC environment and list that VPC in `aws:SourceVpc`.
+- `aws:SourceVpc` is only present when the request goes through a VPC endpoint. Requests from a VPC that leave through a NAT gateway (jump hosts, WorkSpaces) show the NAT's public IP, so add those Elastic IPs to `aws:SourceIp`.
+- AWS CloudShell sends requests from AWS's own addresses, so it stops working unless you run it in a VPC environment that reaches AWS through VPC endpoints or a NAT listed above.
 
 ```json
 {
@@ -1713,12 +1844,19 @@ The first thing done with leaked AWS keys is usually crypto mining on the larges
       "Sid": "DenyExpensiveSageMakerTypes",
       "Effect": "Deny",
       "Action": [
+        "sagemaker:CreateApp",
         "sagemaker:CreateCluster",
+        "sagemaker:CreateDomain",
         "sagemaker:CreateEndpointConfig",
+        "sagemaker:CreateHyperParameterTuningJob",
         "sagemaker:CreateNotebookInstance",
         "sagemaker:CreateProcessingJob",
+        "sagemaker:CreateSpace",
         "sagemaker:CreateTrainingJob",
-        "sagemaker:CreateTransformJob"
+        "sagemaker:CreateTransformJob",
+        "sagemaker:UpdateCluster",
+        "sagemaker:UpdateDomain",
+        "sagemaker:UpdateNotebookInstance"
       ],
       "Resource": "*",
       "Condition": {
@@ -1803,7 +1941,7 @@ The EC2 statements are split on purpose: `RunInstances` also authorizes the volu
 
 > Reference: [Asecure Cloud](https://asecure.cloud/a/scp_cloudformation/)
 
-Only the `admin` role can update or delete the `baseline-*` stacks. Stack ARNs end with a generated ID (`stack/<name>/<id>`), so the resource needs the trailing `/*`.
+Only the `admin` role, the `iac-deploy` pipeline and StackSets can update or delete the baseline stacks. Name them `baseline-*`; StackSets names its stack instances `StackSet-<stackset-name>-<id>`, so a stack set called `baseline-...` is covered by the second ARN. Stack ARNs end with a generated ID (`stack/<name>/<id>`), so the resource needs the trailing `/*`.
 
 ```json
 {
@@ -1824,10 +1962,17 @@ Only the `admin` role can update or delete the `baseline-*` stacks. Stack ARNs e
         "cloudformation:UpdateStack",
         "cloudformation:UpdateTerminationProtection"
       ],
-      "Resource": "arn:aws:cloudformation:*:*:stack/baseline-*/*",
+      "Resource": [
+        "arn:aws:cloudformation:*:*:stack/baseline-*/*",
+        "arn:aws:cloudformation:*:*:stack/StackSet-baseline-*/*"
+      ],
       "Condition": {
         "ArnNotLike": {
-          "aws:PrincipalArn": "arn:aws:iam::*:role/admin"
+          "aws:PrincipalArn": [
+            "arn:aws:iam::*:role/admin",
+            "arn:aws:iam::*:role/iac-deploy",
+            "arn:aws:iam::*:role/stacksets-exec-*"
+          ]
         }
       }
     }
@@ -1889,9 +2034,9 @@ To filter prompts and responses as well, use an [Amazon Bedrock policy](https://
 
 > Reference: [aws:ViaAWSMCPService](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-viaawsmcpservice), [AWS SCP examples](https://github.com/aws-samples/service-control-policy-examples/blob/main/Service-specific-controls/Amazon-Q-Developer/Deny-actions-invoked-through-Amazon-Q-Developer-in-chat-applications-configurations.json)
 
-When an agent uses the AWS-managed MCP Server, the server calls AWS with the user's credentials and the request carries `aws:ViaAWSMCPService = true`. This lets the same person keep full access in the console and CLI while the agent working for them can't delete infrastructure, change IAM or read secrets.
+When an agent uses the AWS-managed MCP Server, the server calls AWS with the user's credentials and the request carries `aws:ViaAWSMCPService = true`. This lets the same person keep full access in the console and CLI while the agent working for them can't run the actions listed below: deleting core infrastructure, any IAM change, assuming other roles, running commands on instances and reading secrets or parameters. It's a denylist, so anything not on it is still allowed; extend it with what matters in your accounts.
 
-Chat apps have the same problem. With Amazon Q Developer in Slack or Teams, anyone in the channel can run commands with the channel's role, and a compromised chat account becomes AWS access. Those requests carry `aws:ChatbotSourceArn`, and `DenyPrivilegedActionsViaChat` keeps IAM, credentials, role assumption and Organizations out of reach from chat.
+Chat apps have the same problem. With Amazon Q Developer in Slack or Teams, anyone in the channel can run commands with the channel's role, and a compromised chat account becomes AWS access. Those requests carry `aws:ChatbotSourceArn`, and `DenyPrivilegedActionsViaChat` keeps IAM changes, credentials, role assumption, secrets and Organizations out of reach from chat.
 
 This only covers the AWS-managed MCP Server and Amazon Q Developer in chat apps. Local MCP servers and agents that run the AWS CLI call AWS directly and look like any other request. For those, give the agent its own role with limited permissions.
 
@@ -1907,6 +2052,7 @@ This only covers the AWS-managed MCP Server and Amazon Q Developer in chat apps.
         "dynamodb:DeleteTable",
         "ec2:DeleteSnapshot",
         "ec2:DeleteVolume",
+        "ec2:DeleteVpc",
         "ec2:TerminateInstances",
         "eks:DeleteCluster",
         "iam:Add*",
@@ -1914,20 +2060,31 @@ This only covers the AWS-managed MCP Server and Amazon Q Developer in chat apps.
         "iam:Create*",
         "iam:Delete*",
         "iam:Detach*",
+        "iam:PassRole",
         "iam:Put*",
         "iam:Remove*",
+        "iam:Set*",
+        "iam:Tag*",
+        "iam:Untag*",
         "iam:Update*",
+        "iam:Upload*",
         "kms:DisableKey",
         "kms:ScheduleKeyDeletion",
         "lambda:DeleteFunction",
+        "lambda:UpdateFunctionCode",
         "logs:DeleteLogGroup",
         "organizations:*",
         "rds:DeleteDBCluster",
         "rds:DeleteDBInstance",
         "s3:DeleteBucket",
         "s3:DeleteBucketPolicy",
+        "s3:DeleteObject",
+        "s3:DeleteObjectVersion",
         "s3:PutBucketPolicy",
-        "secretsmanager:DeleteSecret"
+        "secretsmanager:DeleteSecret",
+        "ssm:SendCommand",
+        "ssm:StartSession",
+        "sts:AssumeRole"
       ],
       "Resource": "*",
       "Condition": {
@@ -1941,7 +2098,10 @@ This only covers the AWS-managed MCP Server and Amazon Q Developer in chat apps.
       "Effect": "Deny",
       "Action": [
         "secretsmanager:BatchGetSecretValue",
-        "secretsmanager:GetSecretValue"
+        "secretsmanager:GetSecretValue",
+        "ssm:GetParameter",
+        "ssm:GetParameters",
+        "ssm:GetParametersByPath"
       ],
       "Resource": "*",
       "Condition": {
@@ -1960,19 +2120,24 @@ This only covers the AWS-managed MCP Server and Amazon Q Developer in chat apps.
         "iam:AttachUserPolicy",
         "iam:CreateAccessKey",
         "iam:CreateLoginProfile",
+        "iam:CreatePolicyVersion",
+        "iam:CreateRole",
         "iam:CreateServiceSpecificCredential",
+        "iam:CreateUser",
         "iam:DeleteRolePermissionsBoundary",
         "iam:DeleteRolePolicy",
         "iam:DeleteUserPermissionsBoundary",
         "iam:DeleteUserPolicy",
         "iam:DetachRolePolicy",
         "iam:DetachUserPolicy",
+        "iam:PassRole",
         "iam:PutGroupPolicy",
         "iam:PutRolePolicy",
         "iam:PutUserPolicy",
         "iam:ResetServiceSpecificCredential",
         "iam:SetDefaultPolicyVersion",
         "iam:UpdateAccessKey",
+        "iam:UpdateAssumeRolePolicy",
         "organizations:*",
         "secretsmanager:GetSecretValue",
         "sts:AssumeRole"

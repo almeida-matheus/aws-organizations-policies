@@ -3,3 +3,4 @@
 site
 .cache
 scripts
+__pycache__/
