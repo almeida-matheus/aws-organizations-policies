@@ -8,6 +8,8 @@
       
       
       
+        <link rel="canonical" href="https://almeida-matheus.github.io/aws-organizations-policies/aws-rcp-examples.html">
+      
       
         <link rel="prev" href="aws-scp-examples.html">
       
@@ -17,7 +19,7 @@
       
       
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -25,10 +27,10 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -72,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#aws-rcp-examples" class="md-skip">
+        <a href="#rcp-examples" class="md-skip">
           Skip to content
         </a>
       
@@ -237,7 +239,7 @@
   <span class="md-ellipsis">
     
   
-    About
+    Overview
   
 
     
@@ -344,90 +346,247 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prevent-cross-service-confused-deputy-problem" class="md-nav__link">
+  <a href="#data-perimeter" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Prevent cross-service confused deputy problem
+        Data perimeter
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data perimeter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enforce-the-identity-perimeter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enforce the identity perimeter
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#restrict-access-to-only-https-connections-to-your-resources" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#enforce-confused-deputy-protection" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Restrict access to only HTTPS connections to your resources
+        Enforce confused deputy protection
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#enforce-secure-tls-connections-for-access-to-s3-buckets" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#enforce-the-network-perimeter" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Enforce secure TLS connections for access to S3 buckets
+        Enforce the network perimeter
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#enforce-object-settings-controls-to-s3-buckets" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#require-https" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Enforce object settings controls to S3 buckets
+        Require HTTPS
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#enforce-mandatory-encryption-to-s3-buckets" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#isolate-production-resources" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Enforce mandatory encryption to S3 buckets
+        Isolate production resources
       
     </span>
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#restrict-iam-role-assumption-to-trusted-aws-accounts-only" class="md-nav__link">
+  <a href="#identity-federation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Restrict IAM role assumption to trusted AWS accounts only
+        Identity federation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Identity federation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#restrict-oidc-federation-to-trusted-providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restrict OIDC federation to trusted providers
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#limit-oidc-role-assumptions-to-specific-github-organizations" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#deny-unauthenticated-cognito-identity-pool-access" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Limit OIDC role assumptions to specific GitHub organizations
+        Deny unauthenticated Cognito identity pool access
       
     </span>
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#block-the-un-tagging-of-critical-security-controls" class="md-nav__link">
+  <a href="#amazon-s3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Block the un-tagging of critical security controls
+        Amazon S3
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Amazon S3">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deny-sse-c-uploads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deny SSE-C uploads
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limit-presigned-url-lifetime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limit presigned URL lifetime
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#protect-s3-bucket-security-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Protect S3 bucket security settings
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aws-kms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AWS KMS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AWS KMS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#protect-kms-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Protect KMS keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aws-secrets-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AWS Secrets Manager
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AWS Secrets Manager">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deny-immediate-secret-deletion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deny immediate secret deletion
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tagging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tagging
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tagging">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#protect-security-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Protect security tags
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -472,240 +631,568 @@
   
 
 
-<h1 id="aws-rcp-examples">AWS RCP Examples</h1>
-<h2 id="prevent-cross-service-confused-deputy-problem">Prevent cross-service confused deputy problem</h2>
+<h1 id="rcp-examples">RCP Examples</h1>
+<p>Every RCP statement must be a <code>Deny</code> with <code>"Principal": "*"</code>. <code>RCPFullAWSAccess</code> stays attached and counts toward the limit of 5 RCPs per entity.</p>
+<p>Before using them:</p>
+<ul>
+<li>Replace the placeholders: <code>o-xxxxxxxxxx</code> (organization ID), <code>222222222222</code> (trusted third-party account), <code>my-github-org</code>, <code>203.0.113.0/24</code> (corporate CIDR) and role names such as <code>admin</code> and <code>iac-deploy</code>.</li>
+<li>Each example is a separate policy for readability. With only 4 free RCP slots per entity, merge statements from several examples into one policy.</li>
+<li>RCPs only apply to <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_rcps.html#rcp-supported-services">supported services</a>. An action from an unsupported service in an RCP has no effect.</li>
+<li>RCPs don't apply to resources in the management account, to calls made by service-linked roles, or to AWS managed KMS keys.</li>
+<li>Unlike SCPs, RCPs are evaluated for principals <strong>outside</strong> your organization too. An exception like <code>arn:aws:iam::*:role/admin</code> also matches a role named <code>admin</code> in someone else's account. Pair those policies with the <a href="#enforce-the-identity-perimeter">identity perimeter</a>, or use account IDs instead of <code>*</code>.</li>
+<li>Review <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-findings-view.html">IAM Access Analyzer external access findings</a> before attaching data perimeter policies. They show which resources are already shared outside the organization.</li>
+</ul>
+<hr />
+<h2 id="data-perimeter">Data perimeter</h2>
+<h3 id="enforce-the-identity-perimeter">Enforce the identity perimeter</h3>
 <blockquote>
-<p>Reference: <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_rcps_examples.html#example-rcp-confused-deputy">AWS Official Documentation</a></p>
+<p>Reference: <a href="https://github.com/aws-samples/data-perimeter-policy-examples/blob/main/resource_control_policies/identity_perimeter_rcp.json">AWS data perimeter examples</a></p>
 </blockquote>
-<p>Some AWS services use their service principals to interact with resources in other AWS services. When an unintended actor tries to leverage an AWS service principal's trust to access resources they shouldn't, this is known as the cross-service <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html">confused deputy problem</a>.</p>
-<p>The following policy ensures that AWS service principals can only access your resources on behalf of requests originating from your organization (<code>o-1234567890</code>) and a trusted third party account explicitly listed (<code>333333333333</code>) and ensures that AWS services can perform these actions as well.</p>
+<p>Only principals from your organization (or from the trusted account <code>222222222222</code>) can access your resources or assume your roles, even if a bucket policy, key policy or role trust policy says otherwise. This is the RCP that stops a misconfigured resource policy from becoming a data leak.</p>
+<ul>
+<li>AWS service principals are not affected (<code>aws:PrincipalIsAWSService</code>). They are handled by the <a href="#enforce-confused-deputy-protection">confused deputy</a> policy.</li>
+<li><code>sts:AssumeRoleWithWebIdentity</code> and <code>sts:AssumeRoleWithSAML</code> are left out because federated users don't belong to an organization. Use the <a href="#restrict-oidc-federation-to-trusted-providers">OIDC</a> policy for those.</li>
+<li>Tag a resource with <code>dp:exclude:identity = true</code> to exempt it, for example a bucket that intentionally shares data with a partner. Protect that tag with an SCP so only the platform team can set it.</li>
+<li>ELB access logs in older Regions are delivered by an AWS-owned account. If you use them, add that account to <code>aws:PrincipalAccount</code>.</li>
+</ul>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;Version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2012-10-17&quot;</span><span class="p">,</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">&quot;Statement&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="p">{</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">      </span><span class="nt">&quot;Sid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;EnforceConfusedDeputyProtection&quot;</span><span class="p">,</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="nt">&quot;Effect&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Deny&quot;</span><span class="p">,</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span><span class="nt">&quot;Principal&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="nt">&quot;Action&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">        </span><span class="s2">&quot;s3:*&quot;</span><span class="p">,</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">        </span><span class="s2">&quot;sqs:*&quot;</span><span class="p">,</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">        </span><span class="s2">&quot;kms:*&quot;</span><span class="p">,</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">        </span><span class="s2">&quot;secretsmanager:*&quot;</span><span class="p">,</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">        </span><span class="s2">&quot;sts:*&quot;</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="p">],</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">      </span><span class="nt">&quot;Resource&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">      </span><span class="nt">&quot;Condition&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">        </span><span class="nt">&quot;StringNotEqualsIfExists&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">          </span><span class="nt">&quot;aws:SourceOrgID&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;o-1234567890&quot;</span><span class="p">,</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">          </span><span class="nt">&quot;aws:SourceAccount&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">            </span><span class="s2">&quot;333333333333&quot;</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">          </span><span class="p">]</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">        </span><span class="p">},</span>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">        </span><span class="nt">&quot;Bool&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">          </span><span class="nt">&quot;aws:PrincipalIsAWSService&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;true&quot;</span>
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">        </span><span class="p">},</span>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">        </span><span class="nt">&quot;Null&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">          </span><span class="nt">&quot;aws:SourceArn&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;false&quot;</span>
-</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">        </span><span class="p">}</span>
-</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">      </span><span class="p">}</span>
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">  </span><span class="p">]</span>
-</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="p">}</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EnforceOrgIdentities"</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">        </span><span class="s2">"aoss:*"</span><span class="p">,</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">        </span><span class="s2">"cognito-idp:*"</span><span class="p">,</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">        </span><span class="s2">"dynamodb:*"</span><span class="p">,</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">        </span><span class="s2">"ecr:*"</span><span class="p">,</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">        </span><span class="s2">"kms:*"</span><span class="p">,</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">        </span><span class="s2">"logs:*"</span><span class="p">,</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">        </span><span class="s2">"s3:*"</span><span class="p">,</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">        </span><span class="s2">"secretsmanager:*"</span><span class="p">,</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">        </span><span class="s2">"sqs:*"</span><span class="p">,</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">        </span><span class="s2">"sts:AssumeRole"</span><span class="p">,</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">        </span><span class="s2">"sts:DecodeAuthorizationMessage"</span><span class="p">,</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">        </span><span class="s2">"sts:GetAccessKeyInfo"</span><span class="p">,</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">        </span><span class="s2">"sts:GetFederationToken"</span><span class="p">,</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">        </span><span class="s2">"sts:GetServiceBearerToken"</span><span class="p">,</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">        </span><span class="s2">"sts:GetSessionToken"</span><span class="p">,</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">        </span><span class="s2">"sts:SetContext"</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">        </span><span class="nt">"StringNotEqualsIfExists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">          </span><span class="nt">"aws:PrincipalOrgID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"o-xxxxxxxxxx"</span><span class="p">,</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">          </span><span class="nt">"aws:PrincipalAccount"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">            </span><span class="s2">"222222222222"</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="w">          </span><span class="p">],</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">          </span><span class="nt">"aws:ResourceTag/dp:exclude:identity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="w">        </span><span class="nt">"BoolIfExists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="w">          </span><span class="nt">"aws:PrincipalIsAWSService"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a><span class="p">}</span>
 </span></code></pre></div>
-<h2 id="restrict-access-to-only-https-connections-to-your-resources">Restrict access to only HTTPS connections to your resources</h2>
+<h3 id="enforce-confused-deputy-protection">Enforce confused deputy protection</h3>
 <blockquote>
-<p>Reference: <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_rcps_examples.html#example-rcp-enforce-ssl">AWS Official Documentation</a></p>
+<p>Reference: <a href="https://github.com/aws-samples/resource-control-policy-examples/blob/main/Restrict-resource-access-patterns/Enforce-controls-on-AWS-services-that-use-service-principals-to-access-your-resources.json">AWS RCP examples</a></p>
 </blockquote>
-<p>The following policy requires that all access to your resources must occur over encrypted connections using HTTPS (TLS). Enforcing this helps mitigate the risk of attackers intercepting or altering network traffic.</p>
+<p>When an AWS service accesses your resources with its service principal (for example CloudTrail writing to a bucket or SNS sending to a queue), someone else's resource could trick the service into acting on yours. That is the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html">confused deputy problem</a>.</p>
+<p>This policy only lets service principals act on your resources when the request comes from your organization or from <code>222222222222</code>. Requests without <code>aws:SourceAccount</code> are not affected, since there is nothing to compare.</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;Version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2012-10-17&quot;</span><span class="p">,</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;Statement&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="p">{</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">      </span><span class="nt">&quot;Sid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;EnforceSecureTransport&quot;</span><span class="p">,</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="nt">&quot;Effect&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Deny&quot;</span><span class="p">,</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="nt">&quot;Principal&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="nt">&quot;Action&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="s2">&quot;sts:*&quot;</span><span class="p">,</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">        </span><span class="s2">&quot;s3:*&quot;</span><span class="p">,</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">        </span><span class="s2">&quot;sqs:*&quot;</span><span class="p">,</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">        </span><span class="s2">&quot;secretsmanager:*&quot;</span><span class="p">,</span>
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">        </span><span class="s2">&quot;kms:*&quot;</span>
-</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">      </span><span class="p">],</span>
-</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">      </span><span class="nt">&quot;Resource&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">      </span><span class="nt">&quot;Condition&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">        </span><span class="nt">&quot;BoolIfExists&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">          </span><span class="nt">&quot;aws:SecureTransport&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;false&quot;</span>
-</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">        </span><span class="p">}</span>
-</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">      </span><span class="p">}</span>
-</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">  </span><span class="p">]</span>
-</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="p">}</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EnforceConfusedDeputyProtection"</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="s2">"aoss:*"</span><span class="p">,</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">        </span><span class="s2">"cognito-identity:*"</span><span class="p">,</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">        </span><span class="s2">"cognito-idp:*"</span><span class="p">,</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">        </span><span class="s2">"dynamodb:*"</span><span class="p">,</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">        </span><span class="s2">"ecr:*"</span><span class="p">,</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">        </span><span class="s2">"kms:*"</span><span class="p">,</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">        </span><span class="s2">"logs:*"</span><span class="p">,</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">        </span><span class="s2">"s3:*"</span><span class="p">,</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">        </span><span class="s2">"secretsmanager:*"</span><span class="p">,</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">        </span><span class="s2">"sqs:*"</span><span class="p">,</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">        </span><span class="s2">"sts:*"</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">        </span><span class="nt">"StringNotEqualsIfExists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">          </span><span class="nt">"aws:SourceOrgID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"o-xxxxxxxxxx"</span><span class="p">,</span>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">          </span><span class="nt">"aws:SourceAccount"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">            </span><span class="s2">"222222222222"</span>
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">          </span><span class="p">],</span>
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">          </span><span class="nt">"aws:ResourceTag/dp:exclude:identity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span>
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">        </span><span class="nt">"Null"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="w">          </span><span class="nt">"aws:SourceAccount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span>
+</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="w">        </span><span class="nt">"Bool"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="w">          </span><span class="nt">"aws:PrincipalIsAWSService"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span>
+</span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-1-36"><a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-1-37"><a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-38"><a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-1-39"><a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="p">}</span>
 </span></code></pre></div>
-<h2 id="enforce-secure-tls-connections-for-access-to-s3-buckets">Enforce secure TLS connections for access to S3 buckets</h2>
+<h3 id="enforce-the-network-perimeter">Enforce the network perimeter</h3>
 <blockquote>
-<p>Reference: <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_rcps_examples.html#example-rcp-consistent-bucket">AWS Official Documentation</a></p>
+<p>Reference: <a href="https://github.com/aws-samples/data-perimeter-policy-examples/blob/main/resource_control_policies/network_perimeter_vpceorgid_rcp.json">AWS data perimeter examples</a></p>
 </blockquote>
-<p>Transport Layer Security (TLS) is a critical protocol for securing data in transit across networks. In AWS, ensuring that all interactions with Amazon S3 use a secure and up-to-date TLS version is essential for protecting data from potential interception or man-in-the-middle attacks.</p>
-<p>This policy ensures that only TLS 1.2 or higher is used when accessing Amazon S3, effectively blocks outdated TLS versions for HTTPs connections.</p>
+<p>Denies access unless the request comes from a VPC endpoint owned by your organization or from the corporate CIDR. Stolen credentials used from a laptop on the internet stop working.</p>
+<p>This one breaks things easily, so it ships opt-in: it only applies to principals tagged <code>dp:include:network = true</code>. Tag roles gradually and remove the condition once everything is covered.</p>
+<ul>
+<li>Requests made by AWS services on your behalf (<code>aws:ViaAWSService</code>) and by service principals are not affected.</li>
+<li><code>aws:ec2-infrastructure</code> is the role EC2 uses for things like EBS encryption with KMS.</li>
+<li>Use <code>dp:exclude:network = true</code> on a principal or resource to exempt it.</li>
+<li>Only add services that support <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-vpceorgid"><code>aws:VpceOrgID</code></a>. For the others the key is never present, so every request outside the corporate CIDR would be denied, even through your own VPC endpoints.</li>
+</ul>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;Version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2012-10-17&quot;</span><span class="p">,</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">&quot;Statement&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="p">{</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="nt">&quot;Sid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;EnforceS3TlsVersion&quot;</span><span class="p">,</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">      </span><span class="nt">&quot;Effect&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Deny&quot;</span><span class="p">,</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">      </span><span class="nt">&quot;Principal&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span><span class="nt">&quot;Action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;s3:*&quot;</span><span class="p">,</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">      </span><span class="nt">&quot;Resource&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">      </span><span class="nt">&quot;Condition&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">        </span><span class="nt">&quot;NumericLessThan&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">          </span><span class="nt">&quot;s3:TlsVersion&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">            </span><span class="s2">&quot;1.2&quot;</span>
-</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">          </span><span class="p">]</span>
-</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">        </span><span class="p">}</span>
-</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">      </span><span class="p">}</span>
-</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">  </span><span class="p">]</span>
-</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="p">}</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EnforceNetworkPerimeter"</span><span class="p">,</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">        </span><span class="s2">"cognito-identity:*"</span><span class="p">,</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">        </span><span class="s2">"ecr:*"</span><span class="p">,</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">        </span><span class="s2">"kms:*"</span><span class="p">,</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">        </span><span class="s2">"s3:*"</span><span class="p">,</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">        </span><span class="s2">"sqs:*"</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">        </span><span class="nt">"NotIpAddressIfExists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">          </span><span class="nt">"aws:SourceIp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"203.0.113.0/24"</span>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">        </span><span class="nt">"StringNotEqualsIfExists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">          </span><span class="nt">"aws:VpceOrgID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"o-xxxxxxxxxx"</span><span class="p">,</span>
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">          </span><span class="nt">"aws:PrincipalTag/dp:exclude:network"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="p">,</span>
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">          </span><span class="nt">"aws:ResourceTag/dp:exclude:network"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span>
+</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">        </span><span class="nt">"BoolIfExists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">          </span><span class="nt">"aws:PrincipalIsAWSService"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span><span class="p">,</span>
+</span><span id="__span-2-27"><a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">          </span><span class="nt">"aws:ViaAWSService"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span>
+</span><span id="__span-2-28"><a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-2-29"><a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="w">        </span><span class="nt">"ArnNotLikeIfExists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-30"><a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="w">          </span><span class="nt">"aws:PrincipalArn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:iam::*:role/aws:ec2-infrastructure"</span>
+</span><span id="__span-2-31"><a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-2-32"><a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="w">        </span><span class="nt">"StringEquals"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-33"><a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a><span class="w">          </span><span class="nt">"aws:PrincipalTag/dp:include:network"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span>
+</span><span id="__span-2-34"><a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-2-35"><a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-2-36"><a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-2-37"><a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-2-38"><a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a><span class="p">}</span>
 </span></code></pre></div>
-<h2 id="enforce-object-settings-controls-to-s3-buckets">Enforce object settings controls to S3 buckets</h2>
-<p>Bucket S3 provides various configuration settings to control access, ownership, versioning, and compliance-related features like object retention and legal holds. However, misconfigurations settings or overly permissive bucket policies can expose sensitive data.</p>
-<p>This policy prevents unauthorized changes to critical S3 security configurations with an exception for a admin role.</p>
+<h3 id="require-https">Require HTTPS</h3>
+<blockquote>
+<p>Reference: <a href="https://github.com/aws-samples/resource-control-policy-examples/blob/main/Restrict-resource-access-patterns/Restrict-access-to-only-HTTPS-connections-to-your-resources.json">AWS RCP examples</a></p>
+</blockquote>
+<p>Denies any request to your resources over plain HTTP.</p>
+<p>All AWS API endpoints have required TLS 1.2 or later since February 2024, so a separate policy denying <code>s3:TlsVersion</code> below <code>1.2</code> no longer adds anything. If you need TLS 1.3, add a statement with <code>"NumericLessThan": {"s3:TlsVersion": "1.3"}</code> and test your clients first.</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">&quot;Version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2012-10-17&quot;</span><span class="p">,</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">&quot;Statement&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="p">{</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">      </span><span class="nt">&quot;Sid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;DenyS3Settings&quot;</span><span class="p">,</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">      </span><span class="nt">&quot;Effect&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Deny&quot;</span><span class="p">,</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">      </span><span class="nt">&quot;Action&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="s2">&quot;s3:PutBucketAcl&quot;</span><span class="p">,</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">        </span><span class="s2">&quot;s3:PutBucketOwnershipControls&quot;</span><span class="p">,</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">        </span><span class="s2">&quot;s3:PutBucketPolicy&quot;</span><span class="p">,</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span><span class="s2">&quot;s3:PutBucketPublicAccessBlock&quot;</span><span class="p">,</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">        </span><span class="s2">&quot;s3:PutBucketObjectLockConfiguration&quot;</span><span class="p">,</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">        </span><span class="s2">&quot;s3:PutBucketVersioning&quot;</span><span class="p">,</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">        </span><span class="s2">&quot;s3:PutObjectAcl&quot;</span><span class="p">,</span>
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">        </span><span class="s2">&quot;s3:PutObjectVersionAcl&quot;</span><span class="p">,</span>
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">        </span><span class="s2">&quot;s3:PutObjectLegalHold&quot;</span><span class="p">,</span>
-</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">        </span><span class="s2">&quot;s3:PutObjectRetention&quot;</span>
-</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">      </span><span class="p">],</span>
-</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">      </span><span class="nt">&quot;Resource&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">      </span><span class="nt">&quot;Condition&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">        </span><span class="nt">&quot;ArnNotLikeIfExists&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">          </span><span class="nt">&quot;aws:PrincipalARN&quot;</span><span class="p">:</span><span class="s2">&quot;arn:aws:iam::*:role/admin&quot;</span>
-</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="w">        </span><span class="p">}</span>
-</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">      </span><span class="p">}</span>
-</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="w">  </span><span class="p">]</span>
-</span><span id="__span-3-27"><a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="p">}</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EnforceSecureTransport"</span><span class="p">,</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">        </span><span class="s2">"aoss:*"</span><span class="p">,</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">        </span><span class="s2">"cognito-identity:*"</span><span class="p">,</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span><span class="s2">"cognito-idp:*"</span><span class="p">,</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">        </span><span class="s2">"dynamodb:*"</span><span class="p">,</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">        </span><span class="s2">"ecr:*"</span><span class="p">,</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">        </span><span class="s2">"kms:*"</span><span class="p">,</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">        </span><span class="s2">"logs:*"</span><span class="p">,</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">        </span><span class="s2">"s3:*"</span><span class="p">,</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">        </span><span class="s2">"secretsmanager:*"</span><span class="p">,</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">        </span><span class="s2">"sqs:*"</span><span class="p">,</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">        </span><span class="s2">"sts:*"</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="w">        </span><span class="nt">"BoolIfExists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">          </span><span class="nt">"aws:SecureTransport"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span>
+</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-3-27"><a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-3-28"><a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-3-29"><a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="p">}</span>
 </span></code></pre></div>
-<h2 id="enforce-mandatory-encryption-to-s3-buckets">Enforce mandatory encryption to S3 buckets</h2>
-<p>Ensure that all S3 buckets use server-side encryption (SSE) to protect data at rest.</p>
-<p>This policy denies S3 upload objects requests if they do not include Amazon S3 managed keys (SSE-S3) or AWS KMS encryption.</p>
+<h3 id="isolate-production-resources">Isolate production resources</h3>
+<blockquote>
+<p>Reference: <a href="https://github.com/aws-samples/resource-control-policy-examples/tree/main/Establish-intra-organization-boundaries">AWS RCP examples</a></p>
+</blockquote>
+<p>The identity perimeter treats every account in the organization the same. This adds a boundary inside it: resources in the production OU can only be accessed by principals from the production OU or the security OU. A compromised dev account can't read prod data even if a bucket or key policy allows it.</p>
+<p>Attach it to the production OU. Paths come from <code>aws organizations list-parents</code> and follow the format <code>o-xxxxxxxxxx/r-xxxx/ou-xxxx-xxxxxxxx/</code>. External principals have no <code>aws:PrincipalOrgPaths</code>, so they are denied as well. If prod shares data with a third party, add an exception for that account or tag the resource. If deployment pipelines run in a separate OU and write to prod resources (artifacts in S3, images in ECR), add that OU's path too.</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;Version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2012-10-17&quot;</span><span class="p">,</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&quot;Statement&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="p">{</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="nt">&quot;Sid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;DenyIncorrectEncryptionHeader&quot;</span><span class="p">,</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">      </span><span class="nt">&quot;Effect&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Deny&quot;</span><span class="p">,</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">      </span><span class="nt">&quot;Principal&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="nt">&quot;Action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;s3:PutObject&quot;</span><span class="p">,</span>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">      </span><span class="nt">&quot;Resource&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arn:aws:s3:::*/*&quot;</span><span class="p">,</span>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">      </span><span class="nt">&quot;Condition&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">        </span><span class="nt">&quot;StringNotEqualsIfExists&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">          </span><span class="nt">&quot;s3:x-amz-server-side-encryption&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;AES256&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;aws:kms&quot;</span><span class="p">]</span>
-</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">        </span><span class="p">}</span>
-</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">      </span><span class="p">}</span>
-</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="p">},</span>
-</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="p">{</span>
-</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">      </span><span class="nt">&quot;Sid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;DenyUnEncryptedObjectUploads&quot;</span><span class="p">,</span>
-</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">      </span><span class="nt">&quot;Effect&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Deny&quot;</span><span class="p">,</span>
-</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">      </span><span class="nt">&quot;Principal&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">      </span><span class="nt">&quot;Action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;s3:PutObject&quot;</span><span class="p">,</span>
-</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">      </span><span class="nt">&quot;Resource&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arn:aws:s3:::&lt;bucket_name&gt;/*&quot;</span><span class="p">,</span>
-</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">      </span><span class="nt">&quot;Condition&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">        </span><span class="nt">&quot;Null&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">          </span><span class="nt">&quot;s3:x-amz-server-side-encryption&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
-</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="w">        </span><span class="p">}</span>
-</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="w">      </span><span class="p">}</span>
-</span><span id="__span-4-27"><a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-4-28"><a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="w">  </span><span class="p">]</span>
-</span><span id="__span-4-29"><a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="p">}</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"IsolateProductionOU"</span><span class="p">,</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="s2">"dynamodb:*"</span><span class="p">,</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">        </span><span class="s2">"ecr:*"</span><span class="p">,</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">        </span><span class="s2">"kms:*"</span><span class="p">,</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">        </span><span class="s2">"logs:*"</span><span class="p">,</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">        </span><span class="s2">"s3:*"</span><span class="p">,</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">        </span><span class="s2">"secretsmanager:*"</span><span class="p">,</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">        </span><span class="s2">"sqs:*"</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">        </span><span class="nt">"ForAllValues:StringNotLikeIfExists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">          </span><span class="nt">"aws:PrincipalOrgPaths"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">            </span><span class="s2">"o-xxxxxxxxxx/r-xxxx/ou-xxxx-prod0000/*"</span><span class="p">,</span>
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">            </span><span class="s2">"o-xxxxxxxxxx/r-xxxx/ou-xxxx-secu0000/*"</span>
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">          </span><span class="p">]</span>
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="w">        </span><span class="nt">"StringNotEqualsIfExists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="w">          </span><span class="nt">"aws:ResourceTag/dp:exclude:identity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span>
+</span><span id="__span-4-27"><a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-4-28"><a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="w">        </span><span class="nt">"BoolIfExists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-29"><a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="w">          </span><span class="nt">"aws:PrincipalIsAWSService"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span>
+</span><span id="__span-4-30"><a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-4-31"><a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-4-32"><a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-4-33"><a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-4-34"><a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a><span class="p">}</span>
 </span></code></pre></div>
-<h2 id="restrict-iam-role-assumption-to-trusted-aws-accounts-only">Restrict IAM role assumption to trusted AWS accounts only</h2>
-<p>The following policy ensures that AWS IAM roles can only be assumption only by requests originating from your organization (<code>o-1234567890</code>) and a trusted third party account explicitly listed (<code>333333333333</code>) and ensures that AWS services can perform the action.</p>
+<hr />
+<h2 id="identity-federation">Identity federation</h2>
+<h3 id="restrict-oidc-federation-to-trusted-providers">Restrict OIDC federation to trusted providers</h3>
+<blockquote>
+<p>Reference: <a href="https://github.com/aws-samples/resource-control-policy-examples/tree/main/Limit-access-to-trusted-OIDC-identity-providers">AWS RCP examples</a></p>
+</blockquote>
+<p>GitHub Actions uses the same issuer for every customer. A role trust policy that checks only <code>aud</code> lets any GitHub repository in the world assume it. This policy rejects GitHub tokens that don't come from <code>my-github-org</code>, regardless of what the trust policy says.</p>
+<ul>
+<li><code>EnforceGitHubOrg</code>: the <code>Null</code> check limits the statement to GitHub tokens. Without it, every other OIDC provider (EKS IRSA, GitLab, Terraform Cloud) would be denied too.</li>
+<li><code>DenyBuiltInWebIdentityProviders</code>: blocks Google, Facebook, Login with Amazon and Cognito identity pools as direct web identity providers. Remove <code>cognito-identity.amazonaws.com</code> if you use Cognito identity pools.</li>
+</ul>
+<p>Other SaaS providers with a shared issuer (GitLab.com, Terraform Cloud, Pulumi, Vercel) need the same treatment. AWS keeps a <a href="https://github.com/aws-samples/resource-control-policy-examples/blob/main/Limit-access-to-trusted-OIDC-identity-providers/Shared-Issuers.json">list with ready-made statements</a>.</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">&quot;Version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2012-10-17&quot;</span><span class="p">,</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">&quot;Statement&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="p">{</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">      </span><span class="nt">&quot;Sid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BlockUntrustedIAMAssumption&quot;</span><span class="p">,</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">      </span><span class="nt">&quot;Effect&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Deny&quot;</span><span class="p">,</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">      </span><span class="nt">&quot;Principal&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">      </span><span class="nt">&quot;Action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sts:AssumeRole&quot;</span><span class="p">,</span>
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">      </span><span class="nt">&quot;Resource&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">      </span><span class="nt">&quot;Condition&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">        </span><span class="nt">&quot;StringNotEqualsIfExists&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">          </span><span class="nt">&quot;aws:SourceOrgID&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;o-1234567890&quot;</span><span class="p">,</span>
-</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">          </span><span class="nt">&quot;aws:SourceAccount&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">            </span><span class="s2">&quot;333333333333&quot;</span>
-</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">          </span><span class="p">]</span>
-</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">        </span><span class="p">},</span>
-</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">        </span><span class="nt">&quot;BoolIfExists&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">          </span><span class="nt">&quot;aws:PrincipalIsAWSService&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;false&quot;</span>
-</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">        </span><span class="p">}</span>
-</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">      </span><span class="p">}</span>
-</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">  </span><span class="p">]</span>
-</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="p">}</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EnforceGitHubOrg"</span><span class="p">,</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sts:AssumeRoleWithWebIdentity"</span><span class="p">,</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">        </span><span class="nt">"StringNotLikeIfExists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">          </span><span class="nt">"token.actions.githubusercontent.com:sub"</span><span class="p">:</span><span class="w"> </span><span class="s2">"repo:my-github-org/*"</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">        </span><span class="nt">"Null"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">          </span><span class="nt">"token.actions.githubusercontent.com:sub"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DenyBuiltInWebIdentityProviders"</span><span class="p">,</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sts:AssumeRoleWithWebIdentity"</span><span class="p">,</span>
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="w">        </span><span class="nt">"StringEquals"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-27"><a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a><span class="w">          </span><span class="nt">"aws:FederatedProvider"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-5-28"><a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="w">            </span><span class="s2">"accounts.google.com"</span><span class="p">,</span>
+</span><span id="__span-5-29"><a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="w">            </span><span class="s2">"cognito-identity.amazonaws.com"</span><span class="p">,</span>
+</span><span id="__span-5-30"><a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="w">            </span><span class="s2">"graph.facebook.com"</span><span class="p">,</span>
+</span><span id="__span-5-31"><a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="w">            </span><span class="s2">"www.amazon.com"</span>
+</span><span id="__span-5-32"><a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="w">          </span><span class="p">]</span>
+</span><span id="__span-5-33"><a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-5-34"><a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-5-35"><a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-5-36"><a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-5-37"><a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a><span class="p">}</span>
 </span></code></pre></div>
-<h2 id="limit-oidc-role-assumptions-to-specific-github-organizations">Limit OIDC role assumptions to specific GitHub organizations</h2>
-<p>If you are using OIDC to allow GitHub Actions to deploy infrastructure via STS (<code>sts:AssumeRoleWithWebIdentity</code>). A critical misconfiguration is leaving the trust policy too broad, allowing any GitHub repository on the internet to assume your role. An RCP can globally enforce that only your company's specific GitHub organization can assume web identity roles.</p>
-<p>This policy deny the STS <code>AssumeRoleWithWebIdentity</code> if the OIDC subject claim doesn't match the organization named <code>org-name</code>, the identity provider token must originate from your specific GitHub organization.</p>
+<h3 id="deny-unauthenticated-cognito-identity-pool-access">Deny unauthenticated Cognito identity pool access</h3>
+<blockquote>
+<p>Reference: <a href="https://github.com/aws-samples/resource-control-policy-examples/blob/main/Service-specific-controls/Cognito-Deny-identity-pool-unauthenticated-access.json">AWS RCP examples</a></p>
+</blockquote>
+<p>Guest access in a Cognito identity pool hands out AWS credentials to anyone who knows the pool ID, which is usually embedded in a frontend. This denies credentials for unauthenticated identities in every pool.</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">&quot;Version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2012-10-17&quot;</span><span class="p">,</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">&quot;Statement&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="p">{</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">      </span><span class="nt">&quot;Sid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;LimitGitHubOIDCAssumption&quot;</span><span class="p">,</span>
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">      </span><span class="nt">&quot;Effect&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Deny&quot;</span><span class="p">,</span>
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">      </span><span class="nt">&quot;Principal&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">      </span><span class="nt">&quot;Action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sts:AssumeRoleWithWebIdentity&quot;</span><span class="p">,</span>
-</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">      </span><span class="nt">&quot;Resource&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">      </span><span class="nt">&quot;Condition&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">        </span><span class="nt">&quot;StringNotLike&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">          </span><span class="nt">&quot;token.actions.githubusercontent.com:sub&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;repo:org-name/*&quot;</span>
-</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">        </span><span class="p">}</span>
-</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">      </span><span class="p">}</span>
-</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">  </span><span class="p">]</span>
-</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="p">}</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DenyUnauthenticatedIdentityPoolAccess"</span><span class="p">,</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">        </span><span class="s2">"cognito-identity:GetCredentialsForIdentity"</span><span class="p">,</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">        </span><span class="s2">"cognito-identity:GetId"</span><span class="p">,</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">        </span><span class="s2">"cognito-identity:GetOpenIdToken"</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">        </span><span class="nt">"Null"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">          </span><span class="nt">"cognito-identity-unauth:IdentityPoolArn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="p">}</span>
 </span></code></pre></div>
-<h2 id="block-the-un-tagging-of-critical-security-controls">Block the un-tagging of critical security controls</h2>
-<p>If you are using Attribute-Based Access Control (ABAC) to manage permissions, users might try to bypass your security rules by simply deleting the tags on a resource (e.g., untagging an SQS queue so it no longer falls under a restricted policy).</p>
-<p>This policy prevent the modification or removal of essential tags across AWS resources in case if the <code>aws:TagKeys</code> condition includes your mandatory security tags like <code>ManagedBy</code> or <code>DataClassification</code>.</p>
+<hr />
+<h2 id="amazon-s3">Amazon S3</h2>
+<h3 id="deny-sse-c-uploads">Deny SSE-C uploads</h3>
+<blockquote>
+<p>Reference: <a href="https://github.com/aws-samples/resource-control-policy-examples/blob/main/Service-specific-controls/S3-Deny-SSE-C.json">AWS RCP examples</a></p>
+</blockquote>
+<p>S3 has encrypted every new object with SSE-S3 by default since January 2023, so a policy requiring the encryption header is no longer needed.</p>
+<p>The real risk is SSE-C (customer-provided keys). Ransomware campaigns have used stolen credentials to rewrite objects with SSE-C using a key only the attacker has. Since April 2026, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/default-s3-c-encryption-setting-faq.html">S3 disables SSE-C by default</a> on new buckets, and on existing ones in accounts that never used it. It can still be turned back on per bucket, and accounts that already had SSE-C objects kept their settings. This RCP closes it everywhere, whatever the bucket configuration says.</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">&quot;Version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2012-10-17&quot;</span><span class="p">,</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">&quot;Statement&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 </span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="p">{</span>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">      </span><span class="nt">&quot;Sid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PreventRemovalOfSecurityTags&quot;</span><span class="p">,</span>
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">      </span><span class="nt">&quot;Effect&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Deny&quot;</span><span class="p">,</span>
-</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">      </span><span class="nt">&quot;Principal&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">      </span><span class="nt">&quot;Action&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">        </span><span class="s2">&quot;s3:PutBucketTagging&quot;</span><span class="p">,</span>
-</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">        </span><span class="s2">&quot;secretsmanager:UntagResource&quot;</span><span class="p">,</span>
-</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">        </span><span class="s2">&quot;kms:UntagResource&quot;</span><span class="p">,</span>
-</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">        </span><span class="s2">&quot;sqs:UntagQueue&quot;</span>
-</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">      </span><span class="p">],</span>
-</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">      </span><span class="nt">&quot;Resource&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">      </span><span class="nt">&quot;Condition&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">        </span><span class="nt">&quot;ForAnyValue:StringEquals&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">          </span><span class="nt">&quot;aws:TagKeys&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">            </span><span class="s2">&quot;ManagedBy&quot;</span><span class="p">,</span>
-</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">            </span><span class="s2">&quot;DataClassification&quot;</span>
-</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">          </span><span class="p">]</span>
-</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">        </span><span class="p">}</span>
-</span><span id="__span-7-22"><a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="w">      </span><span class="p">}</span>
-</span><span id="__span-7-23"><a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-7-24"><a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a><span class="w">  </span><span class="p">]</span>
-</span><span id="__span-7-25"><a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a><span class="p">}</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DenySSECUploads"</span><span class="p">,</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3:PutObject"</span><span class="p">,</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">        </span><span class="nt">"Null"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">          </span><span class="nt">"s3:x-amz-server-side-encryption-customer-algorithm"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="limit-presigned-url-lifetime">Limit presigned URL lifetime</h3>
+<blockquote>
+<p>Reference: <a href="https://github.com/aws-samples/resource-control-policy-examples/blob/main/Service-specific-controls/S3-Prevent-long-term-presigned-url.json">AWS RCP examples</a></p>
+</blockquote>
+<p>Presigned URLs can be valid for up to 7 days and work for anyone who has the link. This denies requests whose signature is older than 1 hour (<code>3600000</code> ms), which limits how long a leaked URL stays useful.</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DenyOldPresignedUrls"</span><span class="p">,</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3:*"</span><span class="p">,</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">        </span><span class="nt">"NumericGreaterThan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">          </span><span class="nt">"s3:signatureAge"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3600000"</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="protect-s3-bucket-security-settings">Protect S3 bucket security settings</h3>
+<p>Only the <code>admin</code> and <code>iac-deploy</code> roles can change bucket policies, bucket ACLs, ownership controls, Block Public Access, encryption, versioning, Object Lock, lifecycle and replication.</p>
+<p>Lifecycle and replication are included because both are used in attacks: a lifecycle rule can expire every object in a day, and replication can copy data to a bucket the attacker controls. <code>s3:BypassGovernanceRetention</code> is there too, so objects under Object Lock in governance mode can't be deleted early.</p>
+<p>Object ACL actions are left out on purpose. Uploads with an <code>x-amz-acl</code> header (CloudTrail, ELB logs and many cross-account writers send <code>bucket-owner-full-control</code>) need <code>s3:PutObjectAcl</code> and would break. Disable ACLs with <code>BucketOwnerEnforced</code> instead.</p>
+<p>Combine with the <a href="#enforce-the-identity-perimeter">identity perimeter</a> so roles with the same names in other accounts are also blocked.</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DenyS3SecuritySettingChanges"</span><span class="p">,</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">        </span><span class="s2">"s3:BypassGovernanceRetention"</span><span class="p">,</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">        </span><span class="s2">"s3:DeleteBucketPolicy"</span><span class="p">,</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">        </span><span class="s2">"s3:PutBucketAcl"</span><span class="p">,</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">        </span><span class="s2">"s3:PutBucketObjectLockConfiguration"</span><span class="p">,</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">        </span><span class="s2">"s3:PutBucketOwnershipControls"</span><span class="p">,</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">        </span><span class="s2">"s3:PutBucketPolicy"</span><span class="p">,</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="w">        </span><span class="s2">"s3:PutBucketPublicAccessBlock"</span><span class="p">,</span>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="w">        </span><span class="s2">"s3:PutBucketVersioning"</span><span class="p">,</span>
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="w">        </span><span class="s2">"s3:PutEncryptionConfiguration"</span><span class="p">,</span>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="w">        </span><span class="s2">"s3:PutLifecycleConfiguration"</span><span class="p">,</span>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="w">        </span><span class="s2">"s3:PutReplicationConfiguration"</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a><span class="w">        </span><span class="nt">"ArnNotLike"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-24"><a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a><span class="w">          </span><span class="nt">"aws:PrincipalArn"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-9-25"><a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a><span class="w">            </span><span class="s2">"arn:aws:iam::*:role/admin"</span><span class="p">,</span>
+</span><span id="__span-9-26"><a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a><span class="w">            </span><span class="s2">"arn:aws:iam::*:role/iac-deploy"</span>
+</span><span id="__span-9-27"><a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a><span class="w">          </span><span class="p">]</span>
+</span><span id="__span-9-28"><a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-9-29"><a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a><span class="w">        </span><span class="nt">"BoolIfExists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-30"><a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a><span class="w">          </span><span class="nt">"aws:PrincipalIsAWSService"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span>
+</span><span id="__span-9-31"><a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-9-32"><a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-9-33"><a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-9-34"><a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-9-35"><a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a><span class="p">}</span>
+</span></code></pre></div>
+<hr />
+<h2 id="aws-kms">AWS KMS</h2>
+<h3 id="protect-kms-keys">Protect KMS keys</h3>
+<blockquote>
+<p>Reference: <a href="https://github.com/aws-samples/resource-control-policy-examples/tree/main/Service-specific-controls">AWS RCP examples</a></p>
+</blockquote>
+<ul>
+<li><code>DenyKeyDeletion</code>: deleting or disabling a key makes everything encrypted with it unreadable. Only the <code>admin</code> role can do it.</li>
+<li><code>DenyLockoutSafetyBypass</code>: a key policy saved with the lockout safety check bypassed can leave the key with no one able to manage it.</li>
+<li><code>DenyGrantsForNonAWSResources</code>: grants give access to a key without showing up in the key policy, which makes them a quiet way to keep access. Only grants created by AWS services for their own resources (EBS, RDS and others) are allowed.</li>
+<li><code>DenyShortDeletionWindow</code>: a key scheduled for deletion can be recovered until the waiting period ends. This forces the maximum of 30 days, for everyone, so there is time to notice.</li>
+<li><code>DenyDeletingKeysInUse</code>: KMS tracks when each key was last used. Nobody, not even <code>admin</code>, can schedule the deletion of a key that encrypted or decrypted anything in the last 90 days, which stops both ransomware and deleting the wrong key. Disabling is left out on purpose: it can be undone, and during an incident it's how you cut off a compromised key. Some keys are used rarely (an EBS volume only uses its key when attached), so treat a long idle period as a hint, not as proof the key can go.</li>
+</ul>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DenyKeyDeletion"</span><span class="p">,</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">        </span><span class="s2">"kms:DeleteCustomKeyStore"</span><span class="p">,</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">        </span><span class="s2">"kms:DeleteImportedKeyMaterial"</span><span class="p">,</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">        </span><span class="s2">"kms:DisableKey"</span><span class="p">,</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">        </span><span class="s2">"kms:ScheduleKeyDeletion"</span>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">        </span><span class="nt">"ArnNotLike"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-17"><a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="w">          </span><span class="nt">"aws:PrincipalArn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:iam::*:role/admin"</span>
+</span><span id="__span-10-18"><a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-10-19"><a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="w">        </span><span class="nt">"BoolIfExists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-20"><a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="w">          </span><span class="nt">"aws:PrincipalIsAWSService"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span>
+</span><span id="__span-10-21"><a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-10-22"><a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-10-23"><a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-10-24"><a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-10-25"><a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DenyGrantsForNonAWSResources"</span><span class="p">,</span>
+</span><span id="__span-10-26"><a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-10-27"><a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-10-28"><a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"kms:CreateGrant"</span><span class="p">,</span>
+</span><span id="__span-10-29"><a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-10-30"><a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-31"><a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a><span class="w">        </span><span class="nt">"BoolIfExists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-32"><a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a><span class="w">          </span><span class="nt">"kms:GrantIsForAWSResource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span><span class="p">,</span>
+</span><span id="__span-10-33"><a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a><span class="w">          </span><span class="nt">"aws:PrincipalIsAWSService"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span>
+</span><span id="__span-10-34"><a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-10-35"><a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-10-36"><a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-10-37"><a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-10-38"><a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DenyShortDeletionWindow"</span><span class="p">,</span>
+</span><span id="__span-10-39"><a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-10-40"><a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-10-41"><a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"kms:ScheduleKeyDeletion"</span><span class="p">,</span>
+</span><span id="__span-10-42"><a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-10-43"><a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-44"><a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a><span class="w">        </span><span class="nt">"NumericLessThan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-45"><a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a><span class="w">          </span><span class="nt">"kms:ScheduleKeyDeletionPendingWindowInDays"</span><span class="p">:</span><span class="w"> </span><span class="s2">"30"</span>
+</span><span id="__span-10-46"><a id="__codelineno-10-46" name="__codelineno-10-46" href="#__codelineno-10-46"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-10-47"><a id="__codelineno-10-47" name="__codelineno-10-47" href="#__codelineno-10-47"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-10-48"><a id="__codelineno-10-48" name="__codelineno-10-48" href="#__codelineno-10-48"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-10-49"><a id="__codelineno-10-49" name="__codelineno-10-49" href="#__codelineno-10-49"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-10-50"><a id="__codelineno-10-50" name="__codelineno-10-50" href="#__codelineno-10-50"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DenyDeletingKeysInUse"</span><span class="p">,</span>
+</span><span id="__span-10-51"><a id="__codelineno-10-51" name="__codelineno-10-51" href="#__codelineno-10-51"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-10-52"><a id="__codelineno-10-52" name="__codelineno-10-52" href="#__codelineno-10-52"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-10-53"><a id="__codelineno-10-53" name="__codelineno-10-53" href="#__codelineno-10-53"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"kms:ScheduleKeyDeletion"</span><span class="p">,</span>
+</span><span id="__span-10-54"><a id="__codelineno-10-54" name="__codelineno-10-54" href="#__codelineno-10-54"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-10-55"><a id="__codelineno-10-55" name="__codelineno-10-55" href="#__codelineno-10-55"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-56"><a id="__codelineno-10-56" name="__codelineno-10-56" href="#__codelineno-10-56"></a><span class="w">        </span><span class="nt">"NumericLessThan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-57"><a id="__codelineno-10-57" name="__codelineno-10-57" href="#__codelineno-10-57"></a><span class="w">          </span><span class="nt">"kms:TrailingDaysWithoutKeyUsage"</span><span class="p">:</span><span class="w"> </span><span class="s2">"90"</span>
+</span><span id="__span-10-58"><a id="__codelineno-10-58" name="__codelineno-10-58" href="#__codelineno-10-58"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-10-59"><a id="__codelineno-10-59" name="__codelineno-10-59" href="#__codelineno-10-59"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-10-60"><a id="__codelineno-10-60" name="__codelineno-10-60" href="#__codelineno-10-60"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-10-61"><a id="__codelineno-10-61" name="__codelineno-10-61" href="#__codelineno-10-61"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-10-62"><a id="__codelineno-10-62" name="__codelineno-10-62" href="#__codelineno-10-62"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DenyLockoutSafetyBypass"</span><span class="p">,</span>
+</span><span id="__span-10-63"><a id="__codelineno-10-63" name="__codelineno-10-63" href="#__codelineno-10-63"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-10-64"><a id="__codelineno-10-64" name="__codelineno-10-64" href="#__codelineno-10-64"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-10-65"><a id="__codelineno-10-65" name="__codelineno-10-65" href="#__codelineno-10-65"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-10-66"><a id="__codelineno-10-66" name="__codelineno-10-66" href="#__codelineno-10-66"></a><span class="w">        </span><span class="s2">"kms:CreateKey"</span><span class="p">,</span>
+</span><span id="__span-10-67"><a id="__codelineno-10-67" name="__codelineno-10-67" href="#__codelineno-10-67"></a><span class="w">        </span><span class="s2">"kms:PutKeyPolicy"</span>
+</span><span id="__span-10-68"><a id="__codelineno-10-68" name="__codelineno-10-68" href="#__codelineno-10-68"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-10-69"><a id="__codelineno-10-69" name="__codelineno-10-69" href="#__codelineno-10-69"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-10-70"><a id="__codelineno-10-70" name="__codelineno-10-70" href="#__codelineno-10-70"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-71"><a id="__codelineno-10-71" name="__codelineno-10-71" href="#__codelineno-10-71"></a><span class="w">        </span><span class="nt">"Bool"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-72"><a id="__codelineno-10-72" name="__codelineno-10-72" href="#__codelineno-10-72"></a><span class="w">          </span><span class="nt">"kms:BypassPolicyLockoutSafetyCheck"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span>
+</span><span id="__span-10-73"><a id="__codelineno-10-73" name="__codelineno-10-73" href="#__codelineno-10-73"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-10-74"><a id="__codelineno-10-74" name="__codelineno-10-74" href="#__codelineno-10-74"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-10-75"><a id="__codelineno-10-75" name="__codelineno-10-75" href="#__codelineno-10-75"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-10-76"><a id="__codelineno-10-76" name="__codelineno-10-76" href="#__codelineno-10-76"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-10-77"><a id="__codelineno-10-77" name="__codelineno-10-77" href="#__codelineno-10-77"></a><span class="p">}</span>
+</span></code></pre></div>
+<hr />
+<h2 id="aws-secrets-manager">AWS Secrets Manager</h2>
+<h3 id="deny-immediate-secret-deletion">Deny immediate secret deletion</h3>
+<p>By default a deleted secret can be restored for 7 to 30 days. <code>ForceDeleteWithoutRecovery</code> skips that window and the secret is gone for good, which is what ransomware and careless cleanup scripts do. This denies it for everyone, so a deleted secret can always be recovered.</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DenyForceDeleteSecret"</span><span class="p">,</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"secretsmanager:DeleteSecret"</span><span class="p">,</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">        </span><span class="nt">"Bool"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">          </span><span class="nt">"secretsmanager:ForceDeleteWithoutRecovery"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-11-15"><a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-11-16"><a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-11-17"><a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="p">}</span>
+</span></code></pre></div>
+<hr />
+<h2 id="tagging">Tagging</h2>
+<h3 id="protect-security-tags">Protect security tags</h3>
+<p>When access is based on tags (ABAC) or the data perimeter uses <code>dp:*</code> tags, removing a tag can remove a restriction. This denies removing <code>DataClassification</code>, <code>ManagedBy</code> and any <code>dp:*</code> tag, except by the <code>admin</code> role.</p>
+<ul>
+<li>S3 is not included. <code>s3:PutBucketTagging</code> replaces the whole tag set and <code>aws:TagKeys</code> lists the tags being kept, not the ones being removed, so the check can't be expressed reliably.</li>
+<li>RCPs only cover supported services. For EC2, Lambda, RDS and others, use the same statement in an SCP (without <code>Principal</code>).</li>
+</ul>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">{</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DenySecurityTagRemoval"</span><span class="p">,</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deny"</span><span class="p">,</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">      </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">        </span><span class="s2">"dynamodb:UntagResource"</span><span class="p">,</span>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">        </span><span class="s2">"ecr:UntagResource"</span><span class="p">,</span>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="w">        </span><span class="s2">"kms:UntagResource"</span><span class="p">,</span>
+</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="w">        </span><span class="s2">"logs:UntagResource"</span><span class="p">,</span>
+</span><span id="__span-12-13"><a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="w">        </span><span class="s2">"secretsmanager:UntagResource"</span><span class="p">,</span>
+</span><span id="__span-12-14"><a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="w">        </span><span class="s2">"sqs:UntagQueue"</span>
+</span><span id="__span-12-15"><a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-12-16"><a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+</span><span id="__span-12-17"><a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a><span class="w">      </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-12-18"><a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a><span class="w">        </span><span class="nt">"ForAnyValue:StringLike"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-12-19"><a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a><span class="w">          </span><span class="nt">"aws:TagKeys"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-12-20"><a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a><span class="w">            </span><span class="s2">"DataClassification"</span><span class="p">,</span>
+</span><span id="__span-12-21"><a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a><span class="w">            </span><span class="s2">"ManagedBy"</span><span class="p">,</span>
+</span><span id="__span-12-22"><a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a><span class="w">            </span><span class="s2">"dp:*"</span>
+</span><span id="__span-12-23"><a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a><span class="w">          </span><span class="p">]</span>
+</span><span id="__span-12-24"><a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-12-25"><a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a><span class="w">        </span><span class="nt">"ArnNotLike"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-12-26"><a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a><span class="w">          </span><span class="nt">"aws:PrincipalArn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:iam::*:role/admin"</span>
+</span><span id="__span-12-27"><a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-12-28"><a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a><span class="w">        </span><span class="nt">"BoolIfExists"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-12-29"><a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a><span class="w">          </span><span class="nt">"aws:PrincipalIsAWSService"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span>
+</span><span id="__span-12-30"><a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-12-31"><a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-12-32"><a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-12-33"><a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-12-34"><a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a><span class="p">}</span>
 </span></code></pre></div>
 
 
@@ -756,10 +1243,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tracking", "toc.integrate", "content.code.copy", "content.action.view", "content.action.edit"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tracking", "toc.integrate", "content.code.copy", "content.action.view", "content.action.edit"], "search": "assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>

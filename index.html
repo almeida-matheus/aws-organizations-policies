@@ -8,6 +8,8 @@
       
       
       
+        <link rel="canonical" href="https://almeida-matheus.github.io/aws-organizations-policies/index.html">
+      
       
       
         <link rel="next" href="aws-scp-examples.html">
@@ -17,7 +19,7 @@
       
       
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -25,10 +27,10 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -108,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              About
+              Overview
             
           </span>
         </div>
@@ -246,7 +248,7 @@
   <span class="md-ellipsis">
     
   
-    About
+    Overview
   
 
     
@@ -264,7 +266,7 @@
   <span class="md-ellipsis">
     
   
-    About
+    Overview
   
 
     
@@ -324,10 +326,32 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best practices
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
       
         Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-policy-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other policy types
       
     </span>
   </a>
@@ -461,6 +485,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -557,88 +592,173 @@
 
 
 <h1 id="aws-organizations-policies">AWS Organizations Policies</h1>
+<p>Examples of Service Control Policies (SCPs) and Resource Control Policies (RCPs) to use as guardrails in an AWS organization. Each example explains what it blocks, why, and what to adjust before attaching it.</p>
 <h2 id="organizations-policies">Organizations Policies</h2>
-<p>AWS Organizations allows you to centrally manage a multi-account environment. Two of features of this service for governance are Service Control Policies (SCPs) and Resource Control Policies (RCPs). They serve distinctly different purposes in securing your cloud infrastructure and building a data perimeter.</p>
+<p>AWS Organizations lets you manage many AWS accounts from one place. Two of its features do most of the governance work: SCPs limit what your identities can do, and RCPs limit who can reach your resources. Used together, they are the base of a <a href="https://aws.amazon.com/identity/data-perimeters-on-aws/">data perimeter</a>.</p>
 <h3 id="differences">Differences</h3>
-<p>Both policies improve security, but they focus on different areas:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">Feature</th>
-<th style="text-align: left;">Service Control Policies (SCPs)</th>
-<th style="text-align: left;">Resource Control Policies (RCPs)</th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;">SCP</th>
+<th style="text-align: left;">RCP</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align: left;"><strong>Target</strong></td>
-<td style="text-align: left;">IAM Identities (Users and Roles)</td>
-<td style="text-align: left;">AWS Resources (e.g., S3 Buckets, KMS Keys)</td>
+<td style="text-align: left;">IAM users and roles in member accounts, including the root user</td>
+<td style="text-align: left;">Resources in member accounts, such as S3 buckets and KMS keys</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>Primary Goal</strong></td>
-<td style="text-align: left;">Restrict what your identities can do.</td>
-<td style="text-align: left;">Restrict who or what can access your resources.</td>
+<td style="text-align: left;"><strong>Main goal</strong></td>
+<td style="text-align: left;">Restrict what your identities can do</td>
+<td style="text-align: left;">Restrict who or what can access your resources</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>External Principals</strong></td>
-<td style="text-align: left;">Does not restrict external accounts from accessing your resources.</td>
-<td style="text-align: left;">Can actively block external accounts from accessing your resources.</td>
+<td style="text-align: left;"><strong>External principals</strong></td>
+<td style="text-align: left;">Not restricted</td>
+<td style="text-align: left;">Restricted</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>Service Support</strong></td>
-<td style="text-align: left;">Applies to all AWS services.</td>
-<td style="text-align: left;">Applies to specific services that support resource-based policies (e.g., S3, STS, KMS, SQS, Secrets Manager, ECR).</td>
+<td style="text-align: left;"><strong>Services</strong></td>
+<td style="text-align: left;">All</td>
+<td style="text-align: left;"><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_rcps.html#rcp-supported-services">Supported services only</a> (S3, STS, KMS, SQS, Secrets Manager, ECR, DynamoDB, CloudWatch Logs, Cognito and others)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Default policy</strong></td>
+<td style="text-align: left;"><code>FullAWSAccess</code></td>
+<td style="text-align: left;"><code>RCPFullAWSAccess</code> (can't be detached)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Effects</strong></td>
+<td style="text-align: left;"><code>Allow</code> and <code>Deny</code></td>
+<td style="text-align: left;"><code>Deny</code> only, with <code>"Principal": "*"</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Not affected</strong></td>
+<td style="text-align: left;">Management account, service-linked roles</td>
+<td style="text-align: left;">Management account, service-linked roles, AWS managed KMS keys</td>
 </tr>
 </tbody>
 </table>
 <h3 id="evaluation">Evaluation</h3>
-<p>Understanding how AWS reads all these policies together is the secret to not accidentally locking yourself out of your own resources. </p>
-<p>When a user or role tries to take an action in AWS, they have to pass through a strict set of checkpoints:</p>
-<ul>
-<li>By default every single request starts with an automatic implicit "Deny".</li>
-<li>If any policy anywhere whether it's an SCP, an RCP, or a standard IAM policy explicitly says "Deny," the request is blocked immediately without exceptions.</li>
-<li>SCPs and RCPs act as guardrails that do not grant permissions on their own. Instead, they define the maximum possible access your accounts and resources can have.</li>
-<li>For an action to successfully go through, an IAM or Resource policy must explicitly say "Allow" and the SCP and RCP bouncers must let it pass. This is usually handled by leaving the default policies (<code>FullAWSAccess</code>,<code>RCPFullAWSAccess</code>).</li>
-</ul>
-<p>The Decision Flow:</p>
+<p>Knowing how AWS combines these policies is what keeps you from locking yourself out of your own accounts. Every request starts as an implicit deny, and SCPs and RCPs never grant anything: they only set the maximum. Since <code>FullAWSAccess</code> and <code>RCPFullAWSAccess</code> allow everything, in practice only your <code>Deny</code> statements count.</p>
+<p>The decision flow:</p>
 <ol>
-<li>Does the SCP and RCP allow this action?<ul>
-<li><em>If No:</em> BLOCKED.</li>
-<li><em>If Yes:</em> Move to Step 2.</li>
+<li>Does any policy (SCP, RCP, identity, resource, permissions boundary or session policy) explicitly deny the action?<ul>
+<li><em>If yes:</em> denied.</li>
+<li><em>If no:</em> go to step 2.</li>
 </ul>
 </li>
-<li>Does the SCP, RCP, or any other policy explicitly deny the action?<ul>
-<li><em>If Yes:</em> BLOCKED.</li>
-<li><em>If No:</em> Move to Step 3.</li>
+<li>If the resource is in a member account, do the RCPs from the root down to that account allow it?<ul>
+<li><em>If no:</em> denied.</li>
+<li><em>If yes:</em> go to step 3.</li>
 </ul>
 </li>
-<li>Does the user's IAM policy or the resource's policy explicitly allow the action?<ul>
-<li><em>If No:</em> BLOCKED (because of the default deny).</li>
-<li><em>If Yes:</em> ACCESS GRANTED.</li>
+<li>If the principal is in a member account, do the SCPs from the root down to that account allow it?<ul>
+<li><em>If no:</em> denied.</li>
+<li><em>If yes:</em> go to step 4.</li>
+</ul>
+</li>
+<li>Does the identity policy or the resource policy allow it? For cross-account access, both have to.<ul>
+<li><em>If no:</em> denied by the implicit deny.</li>
+<li><em>If yes:</em> go to step 5.</li>
+</ul>
+</li>
+<li>If there is a permissions boundary or session policy, does it allow it too?<ul>
+<li><em>If no:</em> denied.</li>
+<li><em>If yes:</em> allowed.</li>
 </ul>
 </li>
 </ol>
-<h3 id="troubleshooting">Troubleshooting</h3>
-<p>When building a strict data perimeter, you might accidentally block legitimate traffic. AWS provides some services to help you troubleshoot policy denials:</p>
+<p>Policies are inherited. A policy attached to an OU applies to every account below it, and nothing at a lower level can override a <code>Deny</code> from above.</p>
+<h3 id="best-practices">Best practices</h3>
 <ul>
-<li><strong>AWS CloudTrail:</strong> Search your event history for <code>AccessDenied</code> or <code>UnauthorizedOperation</code> events. AWS will usually tell you exactly why the action failed (e.g., if it was blocked by a service control policy).</li>
-<li><strong>IAM Policy Simulator:</strong> Select a specific IAM user or role and run a simulation. The simulator will evaluate all attached policies and tell you exactly which statement is denying the action.</li>
-<li><strong>IAM Access Analyzer</strong>: Before applying an RCP to an OU, use Access Analyzer to scan your environment. It generates findings showing exactly who currently has access to your resources so you don't accidentally break production.</li>
+<li><strong>Keep the management account for management only:</strong> no SCP or RCP applies there. Leave workloads out of it and delegate security services to a separate account.</li>
+<li><strong>Organize OUs by function</strong>, not by org chart: <code>Security</code>, <code>Infrastructure</code>, <code>Workloads/Prod</code>, <code>Workloads/Dev</code>, <code>Sandbox</code>, <code>Suspended</code>. Attach broad guardrails at the root and specific ones at the OU level.</li>
+<li><strong>Use exception roles, not exception accounts:</strong> an <code>ArnNotLike</code> on <code>aws:PrincipalArn</code> with a single privileged role keeps exceptions small and easy to audit.</li>
+<li><strong>Match ARNs with <code>ArnLike</code> and <code>ArnNotLike</code>:</strong> <code>StringNotEquals</code> doesn't support wildcards, so <code>arn:aws:iam::*:role/admin</code> never matches and the exception silently stops working.</li>
+<li><strong>Combine statements:</strong> a root, OU or account takes up to 10 SCPs and 5 RCPs, and the default policies use one slot of each. Group related statements instead of creating one policy per control.</li>
+<li><strong>Roll out gradually:</strong> attach to a test account, then a test OU, then up the hierarchy. A broken policy at the root breaks every account at once.</li>
+<li><strong>Keep policies in code:</strong> manage them with Terraform, CloudFormation or Control Tower, and validate on every change.</li>
 </ul>
+<h3 id="troubleshooting">Troubleshooting</h3>
+<p>A strict guardrail can block legitimate traffic. These tools help find out what happened, and ideally catch it before the policy is attached:</p>
+<ul>
+<li><strong>IAM Access Analyzer:</strong> <code>aws accessanalyzer validate-policy --policy-type SERVICE_CONTROL_POLICY --policy-document file://policy.json</code> (or <code>RESOURCE_CONTROL_POLICY</code>) catches invalid actions, unknown condition keys and syntax errors. Before attaching data perimeter RCPs, also check the external access findings to see what is already shared outside the organization.</li>
+<li><strong>Service Authorization Reference:</strong> a condition key on an action that doesn't support it is not an error for IAM. The condition just never matches and the statement silently does nothing, or always applies with negated operators. The <a href="https://docs.aws.amazon.com/service-authorization/latest/reference/reference.html">reference</a> lists the keys of each action (also available as <a href="https://servicereference.us-east-1.amazonaws.com/">JSON</a>), and <code>scripts/validate_policies.py</code> checks every example in this repository against it.</li>
+<li><strong>AWS CloudTrail:</strong> search for <code>AccessDenied</code> or <code>UnauthorizedOperation</code>. The error message says which policy type denied the request, for example <code>with an explicit deny in a service control policy</code> or <code>in a resource control policy</code>.</li>
+<li>
+<p><strong>IAM policy simulator:</strong> evaluates the SCPs attached to an account without running anything, which is useful for actions you wouldn't try for real, like <code>organizations:LeaveOrganization</code>. Attach the SCP to a test OU and run:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>aws<span class="w"> </span>iam<span class="w"> </span>simulate-principal-policy<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>--policy-source-arn<span class="w"> </span>arn:aws:iam::111111111111:role/developer<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>--action-names<span class="w"> </span>organizations:LeaveOrganization<span class="w"> </span>cloudtrail:StopLogging<span class="w"> </span>iam:CreateUser<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--context-entries<span class="w"> </span><span class="s2">"ContextKeyName=aws:PrincipalArn,ContextKeyValues=arn:aws:iam::111111111111:role/developer,ContextKeyType=string"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">                    </span><span class="s2">"ContextKeyName=aws:RequestedRegion,ContextKeyValues=us-east-1,ContextKeyType=string"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span>--query<span class="w"> </span><span class="s1">'EvaluationResults[].[EvalActionName,EvalDecision]'</span><span class="w"> </span>--output<span class="w"> </span>table
+</span></code></pre></div>
+<p>Use a role with broad permissions, so any <code>explicitDeny</code> comes from the SCP, then repeat with the exception role and expect <code>allowed</code>. A few things to keep in mind:</p>
+<ul>
+<li>It doesn't evaluate RCPs, or SCPs that aren't attached yet.</li>
+<li>It doesn't fill in <code>aws:PrincipalArn</code>. Without it in <code>--context-entries</code>, <code>ArnNotLike</code> exceptions always match and the exception role shows up as denied.</li>
+<li>Keys used only in SCPs, like <code>aws:RequestedRegion</code>, can only be set from the CLI.</li>
+<li>Results can differ from real requests. Confirm with one when you can, for example <code>aws ec2 run-instances --dry-run</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="other-policy-types">Other policy types</h3>
+<p>Some controls are better enforced by other policy types in AWS Organizations. They configure the service directly instead of blocking API calls, and they also apply to service-linked roles.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Policy type</th>
+<th style="text-align: left;">Use for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ec2.html">Amazon EC2 policies</a></td>
+<td style="text-align: left;">IMDSv2 defaults, block public access for AMIs, snapshots and VPCs, serial console, allowed AMIs</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_s3.html">Amazon S3 policies</a></td>
+<td style="text-align: left;">S3 Block Public Access for every account</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_security_hub.html">Security Hub</a>, <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_guardduty.html">GuardDuty</a> and <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_inspector.html">Inspector</a> policies</td>
+<td style="text-align: left;">Turn the service on in every account and keep it on</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_bedrock.html">Amazon Bedrock policies</a></td>
+<td style="text-align: left;">Apply a Bedrock Guardrail to every model call in the organization</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_backup.html">Backup policies</a></td>
+<td style="text-align: left;">Backup plans deployed to every account</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html">Tag policies</a></td>
+<td style="text-align: left;">Allowed tag keys and values</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_chatbot.html">Chat applications policies</a></td>
+<td style="text-align: left;">Which Slack and Teams workspaces can access your accounts</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html">AI services opt-out policies</a></td>
+<td style="text-align: left;">Prevent AWS from using your content to improve AI services</td>
+</tr>
+</tbody>
+</table>
 <h2 id="scp-service-control-policies">SCP - Service Control Policies</h2>
 <h3 id="about">About</h3>
-<p>Service Control Policies (SCPs) are authorization policies to help you to centrally manage the security across AWS accounts within an organization.</p>
-<p>SCP provide central control over the maximum permissions available to IAM users and IAM roles (identities) in an organization. They act as a guardrail, helping enforce security boundaries and ensuring compliance by restricting which services or actions identities can perform, regardless of the permissions granted by their individual IAM identity-based policies.</p>
+<p>SCPs set the maximum permissions available to IAM users and roles in an organization. Whatever an identity's own policies say, the SCP decides which services and actions are available at all.</p>
 <h3 id="tips">Tips</h3>
 <ul>
-<li><strong>Understand the Default:</strong> The default SCP <code>FullAWSAccess</code> is automatically created and attached to every entity in your organization (root, OUs, and AWS accounts). It allows all principals to pass SCP evaluation. Use this as a base, then apply Deny statements in additional SCPs to restrict access.</li>
-<li><strong>Management Account Exemption:</strong> SCPs do not affect users or roles in the management account. Therefore, it is strongly recommended not to run operational workloads in the management account, leaving it strictly for billing and organizational governance.</li>
-<li><strong>Test Thoroughly:</strong> Always test your SCPs in a non-production environment to understand their impact before applying them broadly.</li>
-<li><strong>Enforce Least Privilege:</strong> Refine your SCPs to restrict access to only necessary AWS services. Keep in mind that Root user accounts in member accounts are affected by SCPs.</li>
-<li><strong>Use Organizational Units (OUs):</strong> Create multiple OUs instead of attaching all SCPs directly to the root of your organization. This approach allows for more granular restrictions and helps you avoid hitting the quota limits for policy attachments on a single entity.</li>
-<li><strong>Combine Policies:</strong> Each OU can have up to 5 SCPs attached, with a maximum policy size limit of 5,120 characters. To avoid hitting this limit, combine multiple statements into a single SCP where possible.</li>
-<li><strong>Whitespace Matters:</strong> Unlike standard IAM policies, SCPs count whitespace toward the character limit. Be mindful of this and minify your JSON (removing unnecessary spaces and line breaks outside of quotes) to ensure policies stay within the size constraints.</li>
+<li><strong>Deny list, not allow list:</strong> keep <code>FullAWSAccess</code> attached and write SCPs with only <code>Deny</code> statements. With an allow list you have to maintain every action each team needs, and anything you forget stops working.</li>
+<li><strong>The root user is covered:</strong> in member accounts, SCPs also restrict the root user. They are the main way to keep root credentials from being used.</li>
+<li><strong>Global services live in <code>us-east-1</code>:</strong> a Region restriction has to exempt IAM, Organizations, CloudFront, Route 53 and the other global services, or they stop working. The <a href="aws-scp-examples.html#deny-access-to-unapproved-regions">Region example</a> has the full list.</li>
 </ul>
 <h3 id="quotas">Quotas</h3>
 <table>
@@ -650,51 +770,193 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">Maximum number of policies attached to root, OU, or account</td>
-<td style="text-align: left;">5</td>
+<td style="text-align: left;">Maximum number of policies attached to a root, OU or account</td>
+<td style="text-align: left;">10</td>
 </tr>
 <tr>
 <td style="text-align: left;">Maximum size of a policy document</td>
-<td style="text-align: left;">5120 characters</td>
+<td style="text-align: left;">10,240 characters</td>
+</tr>
+<tr>
+<td style="text-align: left;">Maximum number of SCPs in the organization</td>
+<td style="text-align: left;">10,000</td>
 </tr>
 </tbody>
 </table>
+<p>Whitespace counts toward the size, for RCPs too. The console strips it when saving, but the CLI and SDKs don't, so minify the JSON before deploying from code:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>jq<span class="w"> </span>-c<span class="w"> </span>.<span class="w"> </span>policy.json
+</span></code></pre></div>
 <h3 id="examples"><a href="aws-scp-examples.html">Examples</a></h3>
-<ul>
-<li><a href="aws-scp-examples.html#deny-contact-information-changes">Deny contact information changes</a></li>
-<li><a href="aws-scp-examples.html#prevent-region-enable-and-disable-actions">Prevent region enable and disable actions</a></li>
-<li><a href="aws-scp-examples.html#prevent-accounts-from-leaving-the-organizations">Prevent accounts from leaving the organizations</a></li>
-<li><a href="aws-scp-examples.html#deny-access-to-unused-regions">Deny access to unused regions</a></li>
-<li><a href="aws-scp-examples.html#deny-sharing-of-resources-outside-the-organization">Deny sharing of resources outside the organization</a></li>
-<li><a href="aws-scp-examples.html#prevent-disabling-of-security-services">Prevent disabling of security services</a></li>
-<li><a href="aws-scp-examples.html#deny-creating-public-secrets">Deny creating public secrets</a></li>
-<li><a href="aws-scp-examples.html#block-root-user-access">Block root user access</a></li>
-<li><a href="aws-scp-examples.html#deny-critical-iam-actions">Deny critical IAM actions</a></li>
-<li><a href="aws-scp-examples.html#restrict-update-of-critical-iam-roles">Restrict update of critical IAM roles</a></li>
-<li><a href="aws-scp-examples.html#protect-s3-default-security-public-access-block-settings">Protect S3 default security public access block settings</a></li>
-<li><a href="aws-scp-examples.html#preventing-unauthorized-aws-backup-modifications">Preventing unauthorized AWS Backup modifications</a></li>
-<li><a href="aws-scp-examples.html#require-imdsv2-enabled-to-launch-ec2-instances">Require IMDSv2 enabled to launch EC2 instances</a></li>
-<li><a href="aws-scp-examples.html#protect-default-security-settings-ebs-encryption">Protect default security settings EBS encryption</a></li>
-<li><a href="aws-scp-examples.html#prevent-computing-log-deletion">Prevent computing log deletion</a></li>
-<li><a href="aws-scp-examples.html#enforce-secure-aws-lambda-function-url-authentication">Enforce secure AWS lambda function URL authentication</a></li>
-<li><a href="aws-scp-examples.html#restrict-billing-modifications">Restrict billing modifications</a></li>
-<li><a href="aws-scp-examples.html#prevent-modifications-to-specific-cloudformation-stacks">Prevent modifications to specific cloudformation stacks</a></li>
-<li><a href="aws-scp-examples.html#restrict-network-modifications-to-authorized-roles-for-specific-squad">Restrict network modifications to authorized roles for specific squad</a></li>
-</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Category</th>
+<th style="text-align: left;">Policy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Account</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-account-contact-changes-and-closure">Deny account contact changes and closure</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Account</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-enabling-or-disabling-regions">Deny enabling or disabling Regions</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Account</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-leaving-the-organization">Deny leaving the organization</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Account</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-access-to-unapproved-regions">Deny access to unapproved Regions</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">IAM</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-root-user-access">Deny root user access</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">IAM</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-iam-users-and-long-term-credentials">Deny IAM users and long-term credentials</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">IAM</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-identity-provider-changes">Deny identity provider changes</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">IAM</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#protect-critical-iam-roles">Protect critical IAM roles</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">IAM</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#require-a-permissions-boundary-on-roles">Require a permissions boundary on roles</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">IAM</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#control-outbound-identity-federation">Control outbound identity federation</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">IAM</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-identity-store-changes-when-users-come-from-an-idp">Deny Identity Store changes when users come from an IdP</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Security services</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-disabling-security-services">Deny disabling security services</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Data protection</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#enforce-the-resource-perimeter">Enforce the resource perimeter</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Data protection</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-public-secrets">Deny public secrets</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Data protection</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#protect-s3-account-level-block-public-access">Protect S3 account-level Block Public Access</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Data protection</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#require-s3-buckets-in-the-account-regional-namespace">Require S3 buckets in the account regional namespace</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Data protection</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-external-resource-sharing-with-ram">Deny external resource sharing with RAM</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Data protection</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#protect-aws-backup">Protect AWS Backup</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Data protection</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#require-encryption-on-new-rds-instances">Require encryption on new RDS instances</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Data protection</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-publishing-to-amazon-ecr-public">Deny publishing to Amazon ECR Public</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Data protection</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-sharing-snapshots-and-amis-with-other-accounts">Deny sharing snapshots and AMIs with other accounts</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Data protection</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-kms-keys-with-external-key-material">Deny KMS keys with external key material</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Compute</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#require-imdsv2-on-ec2-instances">Require IMDSv2 on EC2 instances</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Compute</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#protect-ec2-and-ssm-account-level-settings">Protect EC2 and SSM account-level settings</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Compute</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#require-iam-auth-on-lambda-function-urls">Require IAM auth on Lambda function URLs</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Compute</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#require-session-manager-instead-of-ssh-keys">Require Session Manager instead of SSH keys</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Logging</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-log-deletion">Deny log deletion</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Network</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#restrict-network-changes-to-the-network-team">Restrict network changes to the network team</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Network</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-public-rds-instances-and-eks-endpoints">Deny public RDS instances and EKS endpoints</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Network</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#restrict-identity-center-sessions-to-expected-networks">Restrict Identity Center sessions to expected networks</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Messaging</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#restrict-amazon-ses-setup">Restrict Amazon SES setup</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Cost and billing</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#restrict-billing-changes">Restrict billing changes</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Cost and billing</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#deny-long-term-commitments">Deny long-term commitments</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Cost and billing</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#restrict-expensive-instance-types">Restrict expensive instance types</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Cost and billing</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#require-a-cost-allocation-tag-on-creation">Require a cost allocation tag on creation</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Governance</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#protect-specific-cloudformation-stacks">Protect specific CloudFormation stacks</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">AI</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#restrict-amazon-bedrock-to-approved-models">Restrict Amazon Bedrock to approved models</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">AI</td>
+<td style="text-align: left;"><a href="aws-scp-examples.html#limit-what-ai-agents-and-chat-apps-can-do">Limit what AI agents and chat apps can do</a></td>
+</tr>
+</tbody>
+</table>
 <h2 id="rcp-resource-control-policies">RCP - Resource Control Policies</h2>
 <h3 id="about_1">About</h3>
-<p>Resource Control Policies (RCPs) are authorization policies to help you to centrally enforce a data perimeter across AWS accounts within an organization.</p>
-<p>RCP provide central control over the maximum permissions allowed on resources. They help maintain resource-level security and ensure compliance by restricting whor or what can be performed on specific resources.</p>
+<p>RCPs set the maximum permissions on resources in an organization, whoever is calling, including principals from outside it. They let you enforce a data perimeter centrally, even when a bucket policy or key policy allows too much.</p>
 <h3 id="tips_1">Tips</h3>
 <ul>
-<li><strong>Service Support Limitations:</strong> RCPs do not currently support all AWS services. They apply to a specific (but growing) list of services, including Amazon S3, AWS STS, AWS KMS, Amazon SQS, AWS Secrets Manager, Amazon ECR, Amazon OpenSearch Serverless, and Amazon Cognito user pools.</li>
-<li><strong>Service-Linked Roles:</strong> RCPs do not restrict calls made by AWS service-linked roles and cannot manage permissions for resources shared across accounts using AWS RAM.</li>
-<li><strong>Understand the Default:</strong> When RCPs are enabled, the default policy <code>RCPFullAWSAccess</code> is automatically attached to every entity in your organization. This allows all requests to pass RCP evaluation until you add explicit Deny statements.</li>
-<li><strong>Management Account Exemption:</strong> SCPs do not affect users or roles in the management account. Therefore, it is strongly recommended not to run operational workloads in the management account, leaving it strictly for billing and organizational governance.</li>
-<li><strong>Test Thoroughly:</strong> Always test your SCPs in a non-production environment to understand their impact before applying them broadly.</li>
-<li><strong>Use Organizational Units (OUs):</strong> Create multiple OUs instead of attaching all RCPs directly to the root of your organization. This approach allows for more granular restrictions and helps you avoid hitting the quota limits for policy attachments on a single entity.</li>
-<li><strong>Combine Policies:</strong> Each OU can have up to 5 RCPs attached, with a maximum policy size limit of 5,120 characters. To avoid hitting this limit, combine multiple statements into a single RCPs where possible.</li>
-<li><strong>Whitespace Matters:</strong> Unlike standard IAM policies, RCPs count whitespace toward the character limit. Be mindful of this and minify your JSON (removing unnecessary spaces and line breaks outside of quotes) to ensure policies stay within the size constraints.</li>
+<li><strong>Check service support:</strong> RCPs only apply to <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_rcps.html#rcp-supported-services">supported services</a>, and an action from any other service simply has no effect. The list keeps growing, so check it before writing a new policy.</li>
+<li><strong>Watch out for outsiders:</strong> RCPs also apply to principals from other AWS accounts. An exception for <code>arn:aws:iam::*:role/admin</code> lets in a role named <code>admin</code> from someone else's account too. Pair those policies with the <a href="aws-rcp-examples.html#enforce-the-identity-perimeter">identity perimeter</a>, or use account IDs instead of <code>*</code>.</li>
+<li><strong>Leave AWS services alone:</strong> add <code>"BoolIfExists": {"aws:PrincipalIsAWSService": "false"}</code> when a policy shouldn't affect service principals, such as CloudTrail delivering logs to a bucket.</li>
 </ul>
 <h3 id="quotas_1">Quotas</h3>
 <table>
@@ -706,25 +968,90 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">Maximum number of policies attached to root, OU, or account</td>
+<td style="text-align: left;">Maximum number of policies attached to a root, OU or account</td>
 <td style="text-align: left;">5</td>
 </tr>
 <tr>
 <td style="text-align: left;">Maximum size of a policy document</td>
-<td style="text-align: left;">5120 characters</td>
+<td style="text-align: left;">5,120 characters</td>
+</tr>
+<tr>
+<td style="text-align: left;">Maximum number of RCPs in the organization</td>
+<td style="text-align: left;">2,000</td>
 </tr>
 </tbody>
 </table>
+<p><code>RCPFullAWSAccess</code> takes one of the 5 slots and can't be detached, so there are only 4 left for your own policies.</p>
 <h3 id="examples_1"><a href="aws-rcp-examples.html">Examples</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Category</th>
+<th style="text-align: left;">Policy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Data perimeter</td>
+<td style="text-align: left;"><a href="aws-rcp-examples.html#enforce-the-identity-perimeter">Enforce the identity perimeter</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Data perimeter</td>
+<td style="text-align: left;"><a href="aws-rcp-examples.html#enforce-confused-deputy-protection">Enforce confused deputy protection</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Data perimeter</td>
+<td style="text-align: left;"><a href="aws-rcp-examples.html#enforce-the-network-perimeter">Enforce the network perimeter</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Data perimeter</td>
+<td style="text-align: left;"><a href="aws-rcp-examples.html#require-https">Require HTTPS</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Data perimeter</td>
+<td style="text-align: left;"><a href="aws-rcp-examples.html#isolate-production-resources">Isolate production resources</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Identity federation</td>
+<td style="text-align: left;"><a href="aws-rcp-examples.html#restrict-oidc-federation-to-trusted-providers">Restrict OIDC federation to trusted providers</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Identity federation</td>
+<td style="text-align: left;"><a href="aws-rcp-examples.html#deny-unauthenticated-cognito-identity-pool-access">Deny unauthenticated Cognito identity pool access</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Amazon S3</td>
+<td style="text-align: left;"><a href="aws-rcp-examples.html#deny-sse-c-uploads">Deny SSE-C uploads</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Amazon S3</td>
+<td style="text-align: left;"><a href="aws-rcp-examples.html#limit-presigned-url-lifetime">Limit presigned URL lifetime</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Amazon S3</td>
+<td style="text-align: left;"><a href="aws-rcp-examples.html#protect-s3-bucket-security-settings">Protect S3 bucket security settings</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">AWS KMS</td>
+<td style="text-align: left;"><a href="aws-rcp-examples.html#protect-kms-keys">Protect KMS keys</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">AWS Secrets Manager</td>
+<td style="text-align: left;"><a href="aws-rcp-examples.html#deny-immediate-secret-deletion">Deny immediate secret deletion</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Tagging</td>
+<td style="text-align: left;"><a href="aws-rcp-examples.html#protect-security-tags">Protect security tags</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="references">References</h2>
 <ul>
-<li><a href="aws-rcp-examples.html#prevent-cross-service-confused-deputy-problem">Prevent cross-service confused deputy problem</a></li>
-<li><a href="aws-rcp-examples.html#restrict-access-to-only-https-connections-to-your-resources">Restrict access to only HTTPS connections to your resources</a></li>
-<li><a href="aws-rcp-examples.html#enforce-secure-tls-connections-for-access-to-s3-buckets">Enforce secure TLS connections for access to S3 buckets</a></li>
-<li><a href="aws-rcp-examples.html#enforce-object-settings-controls-to-s3-buckets">Enforce object settings controls to S3 buckets</a></li>
-<li><a href="aws-rcp-examples.html#enforce-mandatory-encryption-to-s3-buckets">Enforce mandatory encryption to S3 buckets</a></li>
-<li><a href="aws-rcp-examples.html#restrict-iam-role-assumption-to-trusted-aws-accounts-only">Restrict IAM role assumption to trusted AWS accounts only</a></li>
-<li><a href="aws-rcp-examples.html#limit-oidc-role-assumptions-to-specific-github-organizations">Limit OIDC role assumptions to specific GitHub organizations</a></li>
-<li><a href="aws-rcp-examples.html#block-the-un-tagging-of-critical-security-controls">Block the un-tagging of critical security controls</a></li>
+<li><a href="https://github.com/aws-samples/service-control-policy-examples">AWS SCP examples</a></li>
+<li><a href="https://github.com/aws-samples/resource-control-policy-examples">AWS RCP examples</a></li>
+<li><a href="https://github.com/aws-samples/data-perimeter-policy-examples">AWS data perimeter policy examples</a></li>
+<li><a href="https://aws.amazon.com/blogs/security/unlock-new-possibilities-aws-organizations-service-control-policy-now-supports-full-iam-language/">SCPs now support the full IAM policy language</a></li>
+<li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Quotas for AWS Organizations</a></li>
 </ul>
 
 
@@ -775,10 +1102,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tracking", "toc.integrate", "content.code.copy", "content.action.view", "content.action.edit"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tracking", "toc.integrate", "content.code.copy", "content.action.view", "content.action.edit"], "search": "assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>
