@@ -1,54 +1,49 @@
 <h1 align="center">aws-organizations-policies</h1>
 
 <p align="center">
-    <a href="#about">About</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-    <a href="#installation">Installation</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    <a href="https://almeida-matheus.github.io/aws-organizations-policies/">Documentation</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    <a href="#running-locally">Running locally</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="#contributing">Contributing</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="#license">License</a>
 </p>
 
 <br>
 
-## About
+Examples of AWS Organizations Service Control Policies (SCPs) and Resource Control Policies (RCPs) to use as security guardrails across your accounts.
 
-AWS Organizations allows you to manage multiple AWS accounts in a centralized way. 
+- [Overview](docs/index.md): SCP vs RCP, evaluation, quotas and recommendations
+- [SCP examples](docs/aws-scp-examples.md)
+- [RCP examples](docs/aws-rcp-examples.md)
 
-AWS Organizations Policies are a set of rules that help you manage your organizations accounts and control access.
+Every policy is validated in CI: valid JSON, required elements, minified size within the AWS quota, and every action, condition key and operator checked against the [AWS Service Authorization Reference](https://servicereference.us-east-1.amazonaws.com/), including whether each condition key applies to the actions in its statement.
 
-The purpose of this project is to centrally provide examples of policies that can help increase the security level of your organizations accounts.
+## Running locally
 
-Feel free to contibute :)
-
-
-## Installation
-#### 1. Install python and pip
-```
-sudo apt install python3 && python3-pip
-```
-
-#### 2. Clone git repository
-```
+```bash
 git clone git@github.com:almeida-matheus/aws-organizations-policies.git
+cd aws-organizations-policies
+
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+python scripts/validate_policies.py
+mkdocs serve
 ```
 
-#### 3. Install python dependencies
-```
-pip3 install mkdocs mkdocs-material
-```
+To also run IAM Access Analyzer `ValidatePolicy` on every policy (needs the AWS CLI and credentials, makes no changes to the account):
 
-#### 3. Run local server
-```
-cd aws-organizations-policies/
-python3 -m mkdocs serve
+```bash
+AWS_PROFILE=my-profile python scripts/validate_policies.py --access-analyzer
 ```
 
 ## Contributing
-1. Fork the project
-2. Create your branch (`git checkout -b branch-name`)
-3. Add your changes (`git add .`)
-4. Commit your changes (`git commit -m 'add some feature'`)
-5. Push to the branch (`git push origin branch-name`)
-6. Open a pull request
+
+1. Fork the project and create a branch
+2. Add or change a policy in `docs/` following the format of the existing ones
+3. Run `python scripts/validate_policies.py`
+4. Open a pull request
 
 ## License
-Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
+
+Distributed under the MIT License. See [LICENSE](LICENSE).

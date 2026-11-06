@@ -1,6 +1,7 @@
 site_name: AWS Organizations Policies
+site_url: https://almeida-matheus.github.io/aws-organizations-policies/
 nav:
-  - About: index.md
+  - Overview: index.md
   - SCP Examples: aws-scp-examples.md
   - RCP Examples: aws-rcp-examples.md
 theme:
@@ -38,3 +39,6 @@ plugins:
 repo_url: https://github.com/almeida-matheus/aws-organizations-policies
 repo_name: aws-organizations-policies
 edit_uri: edit/main/docs/
+validation:
+  links:
+    anchors: warn

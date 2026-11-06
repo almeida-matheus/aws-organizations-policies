@@ -5,33 +5,59 @@ on:
     branches:
       - main
     paths:
-      - "**.md"
+      - "docs/**"
+      - "scripts/**"
       - "mkdocs.yml"
+      - "requirements.txt"
+      - ".github/workflows/ci.yml"
   pull_request:
     branches:
       - main
-    paths:
-      - "**.md"
-      - "mkdocs.yml"
   workflow_dispatch:
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
-        uses: actions/checkout@v2
-        with:
-            fetch-depth: 0
+        uses: actions/checkout@v7
+
       - name: set up python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v7
         with:
-          python-version: 3.x
+          python-version: "3.x"
+
       - name: install python dependencies
-        run: python -m pip install --upgrade pip && pip install mkdocs mkdocs-material
-      - name: build and deploy
+        run: pip install -r requirements.txt
+
+      - name: validate policies
+        run: python scripts/validate_policies.py
+
+      - name: build site
+        run: mkdocs build --clean --strict
+
+  deploy:
+    needs: validate
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: set up python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.x"
+
+      - name: install python dependencies
+        run: pip install -r requirements.txt
+
+      - name: deploy
         run: |
-          mkdocs build --clean
-          git config --local user.email "action@github.com"
-          git config --local user.name "github-actions"
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
           mkdocs gh-deploy --force
